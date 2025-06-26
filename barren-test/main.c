@@ -7,8 +7,10 @@ static void initialize(engine* engine)
 }
 
 static void update(engine* engine, f64 deltaTime)
-{
-    
+{    
+    quad_renderer_begin_render(&engine->context.quadRenderer, 0);
+
+    quad_renderer_end_render(&engine->context.quadRenderer);
 }
 
 int main()

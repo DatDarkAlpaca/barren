@@ -16,6 +16,11 @@ add_library(${PROJECT_NAME}
     src/engine.c
     src/window.c
 
+    src/utils/linear_allocator.c
+    src/utils/math.c
+    src/utils/memory.c
+    src/utils/string.c
+    
     src/bare-graphics/buffer.c
     src/bare-graphics/graphics.c
     src/bare-graphics/handle.c
@@ -26,4 +31,4 @@ add_library(${PROJECT_NAME}
 
 add_compile_definitions(GLFW_INCLUDE_NONE)
 target_include_directories(${PROJECT_NAME} PUBLIC src src/bare-graphics)
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw glad OpenGL::GL)
+target_link_libraries(${PROJECT_NAME} PUBLIC glfw cglm glad OpenGL::GL)

@@ -17,8 +17,17 @@ static const char* QuadFragmentShaderCode =
     "out_color = vec4(1.0);"
     "}";
 
-u32 quad_renderer_initialize(quad_renderer *renderer)
+u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
 {
+    // Data:
+    u64 quadDataCapacity = maxDataCapacity * sizeof(quad_renderer_data);
+    {
+        renderer->maxDataCapacity = maxDataCapacity;
+        renderer->dataAmount = 0;
+        renderer->dataBuffer = (quad_renderer_data*)malloc(quadDataCapacity);
+    }
+    linear_allocator_initialize(&renderer->dataAllocator, renderer->dataBuffer, quadDataCapacity);
+
     // VAO:
     glCreateVertexArrays(1, &renderer->vao);
 
@@ -56,10 +65,29 @@ void quad_renderer_set_scissor(i32 x, i32 y, i32 width, i32 height)
     glScissor(x, y, width, height);
 }
 
+void quad_renderer_add_data(quad_renderer *renderer, quad_renderer_data *data)
+{
+    linear_allocator_alloc_aligned(&renderer->dataAllocator, sizeof(quad_renderer_data), sizeof(u64));
+    ++renderer->dataAmount;
+}
+
 void quad_renderer_begin_render(quad_renderer *renderer, gl_handle target)
 {
     glBindVertexArray(renderer->vao);
     glBindFramebuffer(GL_FRAMEBUFFER, target);
+
+    glUseProgram(renderer->pipeline.handle);
+}
+void quad_renderer_render(quad_renderer *renderer)
+{
+    for(u64 i = 0; i < renderer->dataAmount; ++i)
+    {
+        quad_renderer_data data = renderer->dataBuffer[i];
+        data.transform;
+        data.rect;
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
 }
 void quad_renderer_end_render(quad_renderer *renderer)
 {

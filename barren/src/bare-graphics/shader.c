@@ -1,5 +1,6 @@
-#include "shader.h"
 #include <glad/glad.h>
+#include "shader.h"
+#include "utils/string.h"
 
 shader_creation_result graphics_create_shader(shader_type type, const char* const source)
 {
@@ -10,13 +11,19 @@ shader_creation_result graphics_create_shader(shader_type type, const char* cons
     };
 
     u32 shaderType;
-    switch(type)
+    switch (type)
     {
         case SHADER_VERTEX:
             shaderType = GL_VERTEX_SHADER;
 
         case SHADER_FRAGMENT:
             shaderType = GL_FRAGMENT_SHADER;
+
+        default:
+        {
+            result.code = GRAPHICS_SHADER_INVALID_TYPE;
+            return result;
+        }
     }
 
     gl_handle shader = glCreateShader(shaderType);
@@ -28,7 +35,7 @@ shader_creation_result graphics_create_shader(shader_type type, const char* cons
     if (!success)
     {
         glGetProgramInfoLog(shader, 512, NULL, infoLog);
-        strcpy_s(result.message, 512, infoLog);
+        safer_stringcopy(result.message, 512, infoLog);
         result.code = GRAPHICS_SHADER_COMPILATION_FAILED;
         return result;
     }

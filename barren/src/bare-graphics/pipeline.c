@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include "pipeline.h"
+#include "utils/string.h"
 
 pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args *const args)
 {
@@ -27,7 +28,7 @@ pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args *
     if (!success)
     {
         glGetProgramInfoLog(pipeline.handle, 512, NULL, infoLog);
-        strcpy(result.message, 512, infoLog);
+        safer_stringcopy(result.message, 512, infoLog);
     }
 
     graphics_destroy_shader(args->vertexShader);
