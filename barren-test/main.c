@@ -1,9 +1,28 @@
 #include <barren.h>
 #include <stdio.h>
 
+typedef struct scene
+{
+    quad_renderer_data quad0;
+} scene;
+
+static scene mainScene;
+
 static void initialize(engine* engine)
 {
+    vec4 position;
+    vec3 scale;
+    {
+        scale[0] = 100.f;
+        scale[1] = 100.f;
+        scale[2] = 1.f;    
+    }
     
+    glm_mat4_identity(mainScene.quad0.transform.data);
+    glm_translate(mainScene.quad0.transform.data, position);
+    glm_scale(mainScene.quad0.transform.data, scale);
+
+    quad_renderer_add_data(&engine->context.quadRenderer, &mainScene.quad0);
 }
 
 static void update(engine* engine, f64 deltaTime)
