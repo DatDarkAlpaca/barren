@@ -10,10 +10,10 @@ typedef struct quad_vertex
 
 static const char* QuadVertexShaderCode = 
     "#version 330 core\n"
-    "layout (location = 0) in vec3 a_position"
-    "void main()"
-    "{"
-    "gl_Position = vec4(a_position, 1.0);"
+    "layout (location = 0) in vec3 a_position;\n"
+    "void main()\n"
+    "{\n"
+    "gl_Position = vec4(a_position, 1.0);\n"
     "}";
 
 static const char* QuadFragmentShaderCode = 
@@ -40,7 +40,6 @@ u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
 
     // Command buffer:
     graphics_command_buffer_initialize(&renderer->commandBuffer);
-    renderer->iboType = INDEX_TYPE_UNSIGNED_INT;
 
     // Shaders:
     shader_creation_result vertexResult = graphics_create_shader(SHADER_VERTEX, QuadVertexShaderCode);
@@ -73,6 +72,7 @@ u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
         .bindingDescriptions = { bindingDescription },
         .bindingDescriptionAmount = 1,
 
+        .topology = TOPOLOGY_TRIANGLES,
         .cullFace = CULL_FRONT,
         .frontFace = FRONT_FACE_CCW,
         .polygonMode = POLYGON_MODE_FILL,
@@ -117,7 +117,7 @@ void quad_renderer_begin_render(quad_renderer* renderer, gl_handle target)
     graphics_bind_pipeline(&renderer->commandBuffer, &renderer->pipeline);
 
     graphics_bind_vertex_buffer(&renderer->commandBuffer, renderer->vbo, 0, sizeof(quad_vertex));
-    graphics_bind_index_buffer(&renderer->commandBuffer, renderer->ibo, renderer->iboType);
+    graphics_bind_index_buffer(&renderer->commandBuffer, renderer->ibo, INDEX_TYPE_UNSIGNED_INT);
 }
 void quad_renderer_render(quad_renderer* renderer)
 {
@@ -127,7 +127,7 @@ void quad_renderer_render(quad_renderer* renderer)
         data.transform;
         data.rect;
 
-        // graphics_draw(&renderer->commandBuffer, 6, 1, 0, 0);
+        graphics_draw_indexed(&renderer->commandBuffer, 6, 1, 0, 0);
     }
 }
 void quad_renderer_end_render(quad_renderer* renderer)

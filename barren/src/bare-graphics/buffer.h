@@ -9,6 +9,8 @@ typedef enum buffer_index_type
 	INDEX_TYPE_UNSIGNED_INT
 } buffer_index_type;
 
+gl_handle get_buffer_index_type(buffer_index_type type);
+
 typedef enum buffer_usage_flags
 {
     NONE                    = 0,

@@ -7,6 +7,7 @@ typedef struct command_buffer
 {
     gl_handle vao;
     gl_handle pipelineTopology;
+    buffer_index_type indexType;
 } command_buffer;
 
 void graphics_command_buffer_initialize(command_buffer* commandBuffer);
@@ -26,5 +27,6 @@ void graphics_bind_vertex_buffer(command_buffer* commandBuffer, gl_handle buffer
 void graphics_bind_index_buffer(command_buffer* commandBuffer, gl_handle bufferHandle, buffer_index_type indexType);
 
 void graphics_draw(command_buffer* commandBuffer, u32 vertexCount, u32 instanceCount, u32 firstVertex, u32 firstInstance);
+void graphics_draw_indexed(command_buffer* commandBuffer, u32 indexCount, u32 instanceCount, u32 firstVertex, u32 firstInstance);
 
 void graphics_end_render(command_buffer* commandBuffer);

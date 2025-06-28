@@ -43,11 +43,6 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
 
     commandBuffer->pipelineTopology = pipeline->topology;
     glUseProgram(pipeline->handle);
-
-    POLYGON_MODE_POINT,
-    POLYGON_MODE_LINE,
-    POLYGON_MODE_FILL,
-
     glFrontFace(pipeline->frontFace == FRONT_FACE_CW ? GL_CW : GL_CCW);
 
     gl_handle polygonMode;
@@ -55,12 +50,15 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
     {
         case POLYGON_MODE_FILL:
             polygonMode = GL_FILL;
+            break;
 
         case POLYGON_MODE_LINE:
             polygonMode = GL_LINE;
+            break;
 
         case POLYGON_MODE_POINT:
             polygonMode = GL_POINT;
+            break;
 
         default:
         {
@@ -74,12 +72,15 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
     {
         case CULL_BACK:
             cullMode = GL_BACK;
+            break;
 
         case CULL_FRONT:
             cullMode = GL_FRONT;
+            break;
 
         case CULL_FRONT_AND_BACK:
             cullMode = GL_FRONT_AND_BACK;
+            break;
 
         default:
         {
@@ -131,6 +132,7 @@ void graphics_bind_index_buffer(command_buffer *commandBuffer, gl_handle bufferH
     assert(commandBuffer->vao != invalid_handle);
     assert(bufferHandle != invalid_handle);
 
+    commandBuffer->indexType = indexType;
     glVertexArrayElementBuffer(commandBuffer->vao, bufferHandle);
 }
 
@@ -146,18 +148,44 @@ void graphics_draw(command_buffer *commandBuffer, u32 vertexCount, u32 instanceC
     {
         case TOPOLOGY_POINTS:
             topology = GL_POINTS;
+            break;
 
         case TOPOLOGY_LINES:
             topology = GL_LINES;
+            break;
 
         case TOPOLOGY_TRIANGLES:
             topology = GL_TRIANGLES;
+            break;
     }
 
     if (instanceCount == 1)
 		glDrawArrays(topology, firstVertex, vertexCount);
 	else
 		glDrawArraysInstanced(topology, firstVertex, vertexCount, instanceCount);
+}
+void graphics_draw_indexed(command_buffer* commandBuffer, u32 indexCount, u32 instanceCount, u32 firstVertex, u32 firstInstance)
+{
+    gl_handle topology;
+    switch (commandBuffer->pipelineTopology)
+    {
+        case TOPOLOGY_POINTS:
+            topology = GL_POINTS;
+            break;
+
+        case TOPOLOGY_LINES:
+            topology = GL_LINES;
+            break;
+
+        case TOPOLOGY_TRIANGLES:
+            topology = GL_TRIANGLES;
+            break;
+    }
+
+    if (instanceCount == 1)
+        glDrawElements(topology, indexCount, get_buffer_index_type(commandBuffer->indexType), NULL);
+    else
+        glDrawElementsInstanced(topology, indexCount, get_buffer_index_type(commandBuffer->indexType), NULL, instanceCount);
 }
 
 void graphics_end_render(command_buffer *commandBuffer)

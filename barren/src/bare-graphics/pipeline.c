@@ -77,11 +77,6 @@ pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args *
     memcpy(pipeline.bindingDescriptions, args->bindingDescriptions, 
         args->bindingDescriptionAmount * sizeof(binding_description));
     
-    pipeline_creation_result result = {
-        .code = GRAPHICS_PIPELINE_CREATION_FAILED,
-        .pipeline = pipeline
-    };
-
     pipeline.handle = glCreateProgram();
     glAttachShader(pipeline.handle, args->vertexShader);
     glAttachShader(pipeline.handle, args->fragmentShader);
@@ -93,12 +88,23 @@ pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args *
     glGetProgramiv(pipeline.handle, GL_LINK_STATUS, &success);
     if (!success)
     {
+        pipeline_creation_result result = {
+            .code = GRAPHICS_PIPELINE_CREATION_FAILED
+        };
+
         glGetProgramInfoLog(pipeline.handle, 512, NULL, infoLog);
         safer_stringcopy(result.message, 512, infoLog);
+
+        return result;
     }
 
     graphics_destroy_shader(args->vertexShader);
     graphics_destroy_shader(args->fragmentShader);
+
+    pipeline_creation_result result = {
+        .code = SUCCESS,
+        .pipeline = pipeline
+    };
 
     return result;
 }

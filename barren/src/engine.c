@@ -38,7 +38,9 @@ u64 engine_initialize(engine *engine)
     graphics_system_late_initialize();
 
     // Quad Renderer:
-    quad_renderer_initialize(&engine->context.quadRenderer, 32000);
+    u64 quadRendererResult = quad_renderer_initialize(&engine->context.quadRenderer, 32000);
+    if(quadRendererResult)
+        return quadRendererResult;
 
     return SUCCESS;
 }

@@ -2,6 +2,23 @@
 #include "buffer.h"
 #include "handle.h"
 
+gl_handle get_buffer_index_type(buffer_index_type type)
+{
+    switch (type)
+    {
+        case INDEX_TYPE_UNSIGNED_BYTE:
+            return GL_UNSIGNED_BYTE;
+
+        case INDEX_TYPE_UNSIGNED_SHORT:
+            return GL_UNSIGNED_SHORT;
+
+        case INDEX_TYPE_UNSIGNED_INT:
+            return GL_UNSIGNED_INT;
+    }
+
+    return invalid_handle;
+}
+
 gl_handle graphics_create_buffer(void* data, u64 size, buffer_usage_flags usageFlags)
 {
     gl_handle bufferHandle;
