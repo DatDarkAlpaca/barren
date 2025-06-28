@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#include "camera.h"
 #include "pipeline.h"
 #include "commands.h"
 #include "utils/math.h"
@@ -14,6 +15,7 @@ typedef struct quad_renderer_data
 typedef struct quad_renderer
 {
     command_buffer commandBuffer;
+    camera camera;
     
     linear_allocator dataAllocator;
     quad_renderer_data* dataBuffer;

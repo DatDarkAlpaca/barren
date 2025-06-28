@@ -35,6 +35,9 @@ u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
     }
     linear_allocator_initialize(&renderer->dataAllocator, renderer->dataBuffer, quadDataCapacity);
 
+    // Camera:
+    camera_initialize(&renderer->camera);
+
     // Command buffer:
     graphics_command_buffer_initialize(&renderer->commandBuffer);
     renderer->iboType = INDEX_TYPE_UNSIGNED_INT;
