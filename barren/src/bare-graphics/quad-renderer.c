@@ -1,12 +1,19 @@
 #include <glad/glad.h>
-#include "quad-renderer.h"
+
 #include "shader.h"
+#include "quad-renderer.h"
+
+typedef struct quad_vertex
+{
+    vec3 position;
+} quad_vertex;
 
 static const char* QuadVertexShaderCode = 
     "#version 330 core\n"
+    "layout (location = 0) in vec3 a_position"
     "void main()"
     "{"
-    "gl_Position = vec4(1.0);"
+    "gl_Position = vec4(a_position, 1.0);"
     "}";
 
 static const char* QuadFragmentShaderCode = 
@@ -28,8 +35,9 @@ u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
     }
     linear_allocator_initialize(&renderer->dataAllocator, renderer->dataBuffer, quadDataCapacity);
 
-    // VAO:
-    glCreateVertexArrays(1, &renderer->vao);
+    // Command buffer:
+    graphics_command_buffer_initialize(&renderer->commandBuffer);
+    renderer->iboType = INDEX_TYPE_UNSIGNED_INT;
 
     // Shaders:
     shader_creation_result vertexResult = graphics_create_shader(SHADER_VERTEX, QuadVertexShaderCode);
@@ -40,8 +48,28 @@ u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
     if(fragResult.code)
         return fragResult.code;
 
+    // Vertex bindings:
+    binding_description bindingDescription = {
+        .binding = 0,
+        .stride = sizeof(quad_vertex),
+        .inputRate = INPUT_RATE_VERTEX
+    };
+    attribute attribute0 = {
+        .binding = 0,
+        .format = ATTRIBUTE_FORMAT_R32G32B32_SFLOAT,
+        .location = 0,
+        .normalized = false,
+        .offset = 0,
+    };
+
     // Pipeline:
     pipeline_creation_args pipelineArgs = {
+        .attributes = { attribute0 },
+        .attributeAmount = 1,
+
+        .bindingDescriptions = { bindingDescription },
+        .bindingDescriptionAmount = 1,
+
         .cullFace = CULL_FRONT,
         .frontFace = FRONT_FACE_CCW,
         .polygonMode = POLYGON_MODE_FILL,
@@ -53,32 +81,42 @@ u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
         return pipelineResult.code;
 
     renderer->pipeline = pipelineResult.pipeline;
+
+    // Buffers:
+    quad_vertex vertices[4] = {
+        { .position = { -0.5f, -0.5f, 0.0f } },
+        { .position = {  0.5f, -0.5f, 0.0f } },
+        { .position = {  0.5f,  0.5f, 0.0f } },
+        { .position = { -0.5f,  0.5f, 0.0f } }
+    };
+
+    renderer->vbo = graphics_create_buffer(vertices, sizeof(vertices), 
+        BUFFER_DYNAMIC_STORAGE
+    );
+    
+    unsigned int indices[6] = { 0, 1, 2, 2, 3, 0 };
+    renderer->ibo = graphics_create_buffer(indices, sizeof(indices), BUFFER_DYNAMIC_STORAGE);
+
     return SUCCESS;
 }
 
-void quad_renderer_set_viewport(i32 x, i32 y, i32 width, i32 height)
-{
-    glViewport(x, y, width, height);   
-}
-void quad_renderer_set_scissor(i32 x, i32 y, i32 width, i32 height)
-{
-    glScissor(x, y, width, height);
-}
-
-void quad_renderer_add_data(quad_renderer *renderer, quad_renderer_data *data)
+void quad_renderer_add_data(quad_renderer* renderer, quad_renderer_data *data)
 {
     linear_allocator_alloc_aligned(&renderer->dataAllocator, sizeof(quad_renderer_data), sizeof(u64));
     ++renderer->dataAmount;
 }
 
-void quad_renderer_begin_render(quad_renderer *renderer, gl_handle target)
+void quad_renderer_begin_render(quad_renderer* renderer, gl_handle target)
 {
-    glBindVertexArray(renderer->vao);
-    glBindFramebuffer(GL_FRAMEBUFFER, target);
+    graphics_begin_render(&renderer->commandBuffer, target);
+    graphics_clear();
 
-    glUseProgram(renderer->pipeline.handle);
+    graphics_bind_pipeline(&renderer->commandBuffer, &renderer->pipeline);
+
+    graphics_bind_vertex_buffer(&renderer->commandBuffer, renderer->vbo, 0, sizeof(quad_vertex));
+    graphics_bind_index_buffer(&renderer->commandBuffer, renderer->ibo, renderer->iboType);
 }
-void quad_renderer_render(quad_renderer *renderer)
+void quad_renderer_render(quad_renderer* renderer)
 {
     for(u64 i = 0; i < renderer->dataAmount; ++i)
     {
@@ -86,10 +124,10 @@ void quad_renderer_render(quad_renderer *renderer)
         data.transform;
         data.rect;
 
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // graphics_draw(&renderer->commandBuffer, 6, 1, 0, 0);
     }
 }
-void quad_renderer_end_render(quad_renderer *renderer)
+void quad_renderer_end_render(quad_renderer* renderer)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    graphics_end_render(&renderer->commandBuffer);
 }

@@ -9,8 +9,3 @@ void graphics_system_late_initialize();
 
 void graphics_present(GLFWwindow* window);
 
-// buffer
-// texture
-// descriptor set
-// framebuffer / render target
-

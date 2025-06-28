@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME}
     src/utils/string.c
     
     src/bare-graphics/buffer.c
+    src/bare-graphics/commands.c
     src/bare-graphics/graphics.c
     src/bare-graphics/handle.c
     src/bare-graphics/pipeline.c

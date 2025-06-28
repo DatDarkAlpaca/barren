@@ -1,5 +1,13 @@
 #pragma once
 #include "handle.h"
+#include "common.h"
+
+typedef enum buffer_index_type
+{
+	INDEX_TYPE_UNSIGNED_BYTE,
+	INDEX_TYPE_UNSIGNED_SHORT,
+	INDEX_TYPE_UNSIGNED_INT
+} buffer_index_type;
 
 typedef enum buffer_usage_flags
 {

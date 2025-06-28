@@ -1,6 +1,64 @@
 #include <glad/glad.h>
+#include <string.h>
 #include "pipeline.h"
 #include "utils/string.h"
+
+gl_handle get_attribute_format(attribute_format format)
+{
+    switch (format)
+    {
+        case ATTRIBUTE_FORMAT_R32_SFLOAT:
+            return GL_FLOAT;
+
+        case ATTRIBUTE_FORMAT_R64_SFLOAT:
+            return GL_FLOAT;
+
+        case ATTRIBUTE_FORMAT_R32G32_SFLOAT:
+            return GL_FLOAT;
+
+        case ATTRIBUTE_FORMAT_R32G32B32_SFLOAT:
+            return GL_FLOAT;
+
+        case ATTRIBUTE_FORMAT_R32G32B32A32_SFLOAT:
+            return GL_FLOAT;
+
+        case ATTRIBUTE_FORMAT_R32G32_SINT:
+            return GL_INT;
+
+        case ATTRIBUTE_FORMAT_R32G32B32A32_UINT:
+            return GL_UNSIGNED_INT;
+    }
+
+    return invalid_handle;
+}
+u64 get_attribute_format_size(attribute_format format)
+{
+    switch (format)
+    {
+        case ATTRIBUTE_FORMAT_R32_SFLOAT:
+            return 1;
+
+        case ATTRIBUTE_FORMAT_R64_SFLOAT:
+            return 1;
+
+        case ATTRIBUTE_FORMAT_R32G32_SFLOAT:
+            return 2;
+
+        case ATTRIBUTE_FORMAT_R32G32B32_SFLOAT:
+            return 3;
+
+        case ATTRIBUTE_FORMAT_R32G32B32A32_SFLOAT:
+            return 4;
+
+        case ATTRIBUTE_FORMAT_R32G32_SINT:
+            return 2;
+
+        case ATTRIBUTE_FORMAT_R32G32B32A32_UINT:
+            return 4;
+    }
+    
+    return invalid_handle;
+}
 
 pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args *const args)
 {
@@ -8,9 +66,17 @@ pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args *
         .handle = invalid_handle,
         .cullFace = args->cullFace,
         .frontFace = args->frontFace,
-        .polygonMode = args->polygonMode
+        .polygonMode = args->polygonMode,
+        .topology = args->topology,
+        
+        .attributeAmount = args->attributeAmount,
+        .bindingDescriptionAmount = args->bindingDescriptionAmount,
     };
 
+    memcpy(pipeline.attributes, args->attributes, args->attributeAmount * sizeof(attribute));
+    memcpy(pipeline.bindingDescriptions, args->bindingDescriptions, 
+        args->bindingDescriptionAmount * sizeof(binding_description));
+    
     pipeline_creation_result result = {
         .code = GRAPHICS_PIPELINE_CREATION_FAILED,
         .pipeline = pipeline
@@ -42,4 +108,5 @@ void graphics_destroy_pipeline(pipeline* pipeline)
     pipeline->cullFace = invalid_handle;
     pipeline->frontFace = invalid_handle;
     pipeline->polygonMode = invalid_handle;
+    pipeline->topology = invalid_handle;
 }

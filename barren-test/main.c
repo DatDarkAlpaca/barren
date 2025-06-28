@@ -28,6 +28,7 @@ static void initialize(engine* engine)
 static void update(engine* engine, f64 deltaTime)
 {    
     quad_renderer_begin_render(&engine->context.quadRenderer, 0);
+    graphics_set_clear_color(0.2f, 0.2f, 0.2f, 1.0f);
 
     quad_renderer_end_render(&engine->context.quadRenderer);
 }
