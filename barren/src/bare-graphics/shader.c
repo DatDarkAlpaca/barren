@@ -37,7 +37,7 @@ shader_creation_result graphics_create_shader(shader_type type, const char* cons
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
-        glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+        glGetShaderInfoLog(shader, 1024, NULL, infoLog);
         safer_stringcopy(result.message, 1024, infoLog);
         result.code = GRAPHICS_SHADER_COMPILATION_FAILED;
         return result;

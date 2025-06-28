@@ -71,12 +71,14 @@ pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args *
         
         .attributeAmount = args->attributeAmount,
         .bindingDescriptionAmount = args->bindingDescriptionAmount,
+        .descriptorSetAmount = args->descriptorSetAmount
     };
 
     memcpy(pipeline.attributes, args->attributes, args->attributeAmount * sizeof(attribute));
     memcpy(pipeline.bindingDescriptions, args->bindingDescriptions, 
         args->bindingDescriptionAmount * sizeof(binding_description));
-    
+    memcpy(pipeline.descriptorSets, args->descriptorSets, args->descriptorSetAmount * sizeof(descriptor_set));
+
     pipeline.handle = glCreateProgram();
     glAttachShader(pipeline.handle, args->vertexShader);
     glAttachShader(pipeline.handle, args->fragmentShader);

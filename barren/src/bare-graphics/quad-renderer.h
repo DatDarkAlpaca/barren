@@ -26,6 +26,7 @@ typedef struct quad_renderer
     gl_handle vao;
     gl_handle vbo;
     gl_handle ibo;
+    gl_handle mvpHandle;
 } quad_renderer;
 
 u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity);

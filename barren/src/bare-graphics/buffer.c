@@ -19,7 +19,15 @@ gl_handle get_buffer_index_type(buffer_index_type type)
     return invalid_handle;
 }
 
-gl_handle graphics_create_buffer(void* data, u64 size, buffer_usage_flags usageFlags)
+gl_handle graphics_create_empty_buffer(buffer_usage_flags usageFlags)
+{
+    gl_handle bufferHandle;
+    glCreateBuffers(1, &bufferHandle);
+
+    glNamedBufferStorage(bufferHandle, 0, NULL, usageFlags);
+    return bufferHandle;
+}
+gl_handle graphics_create_buffer(void *data, u64 size, buffer_usage_flags usageFlags)
 {
     gl_handle bufferHandle;
     glCreateBuffers(1, &bufferHandle);

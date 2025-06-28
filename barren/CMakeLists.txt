@@ -24,11 +24,13 @@ add_library(${PROJECT_NAME}
     src/bare-graphics/buffer.c
     src/bare-graphics/camera.c
     src/bare-graphics/commands.c
+    src/bare-graphics/descriptors.c
     src/bare-graphics/graphics.c
     src/bare-graphics/handle.c
     src/bare-graphics/pipeline.c
     src/bare-graphics/quad-renderer.c
     src/bare-graphics/shader.c
+    src/bare-graphics/texture.c
 )
 
 add_compile_definitions(GLFW_INCLUDE_NONE)

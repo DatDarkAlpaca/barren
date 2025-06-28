@@ -43,6 +43,8 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
 
     commandBuffer->pipelineTopology = pipeline->topology;
     glUseProgram(pipeline->handle);
+    
+    // State:
     glFrontFace(pipeline->frontFace == FRONT_FACE_CW ? GL_CW : GL_CCW);
 
     gl_handle polygonMode;
@@ -89,6 +91,7 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
     }
 	glCullFace(cullMode);
 
+    // Attributes:
     for(u64 i = 0; i < pipeline->bindingDescriptionAmount; ++i)
     {
         binding_description* description = &pipeline->bindingDescriptions[i];
@@ -116,9 +119,36 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
 			glVertexArrayBindingDivisor(commandBuffer->vao, description->binding, divisor);
         }
     }
-}
-void graphics_bind_descriptor_set(gl_handle descriptorSetHandle)
-{
+
+    // Descriptors:
+    for(u64 i = 0; i < pipeline->descriptorSetAmount; ++i)
+    {
+        descriptor_set* set = &pipeline->descriptorSets[i];
+
+        for(u64 j = 0; j < set->descriptorAmount; ++j)
+        {
+            descriptor* descriptor = &set->descriptors[j];
+            
+            switch(descriptor->type)
+            {
+                case DESCRIPTOR_TYPE_UNIFORM_BUFFER:
+                {
+                    glBindBufferBase(GL_UNIFORM_BUFFER, descriptor->binding, descriptor->handle);
+                } break;
+
+                case DESCRIPTOR_TYPE_SHADER_STORAGE_BUFFER:
+                {
+                    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, descriptor->binding, descriptor->handle);
+                } break;
+
+                case DESCRIPTOR_TYPE_COMBINED_TEXTURE_SAMPLER:
+                {
+                    glBindTextureUnit(descriptor->binding, descriptor->handle);
+                    glBindTexture(GL_TEXTURE_2D, descriptor->handle);
+                } break;
+            }
+        }
+    }
 }
 void graphics_bind_vertex_buffer(command_buffer *commandBuffer, gl_handle bufferHandle, u32 binding, u32 stride)
 {

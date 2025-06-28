@@ -1,8 +1,10 @@
 #pragma once
 #include <stdbool.h>
 #include "handle.h"
-#define BAR_PIPELINE_MAX_ATTRIBUTES 16
-#define BAR_PIPELINE_MAX_BINDINGS   4
+#include "descriptors.h"
+#define BAR_PIPELINE_MAX_ATTRIBUTES         16
+#define BAR_PIPELINE_MAX_BINDINGS           4
+#define BAR_PIPELINE_MAX_DESCRIPTOR_SETS    4
 
 // Rasterizer:
 typedef enum pipeline_front_face
@@ -73,8 +75,10 @@ typedef struct pipeline_creation_args
 {
     binding_description bindingDescriptions[BAR_PIPELINE_MAX_BINDINGS];
     attribute attributes[BAR_PIPELINE_MAX_ATTRIBUTES];
+    descriptor_set descriptorSets[BAR_PIPELINE_MAX_DESCRIPTOR_SETS];
     u64 attributeAmount;
     u64 bindingDescriptionAmount;
+    u64 descriptorSetAmount;
 
     gl_handle vertexShader;
     gl_handle fragmentShader;
@@ -89,8 +93,10 @@ typedef struct pipeline
 {
     binding_description bindingDescriptions[BAR_PIPELINE_MAX_BINDINGS];
     attribute attributes[BAR_PIPELINE_MAX_ATTRIBUTES];
+    descriptor_set descriptorSets[BAR_PIPELINE_MAX_DESCRIPTOR_SETS];
     u64 attributeAmount;
     u64 bindingDescriptionAmount;
+    u64 descriptorSetAmount;
 
     gl_handle handle;
 

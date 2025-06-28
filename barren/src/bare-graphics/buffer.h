@@ -21,6 +21,7 @@ typedef enum buffer_usage_flags
     BUFFER_COHERENT         = 1 << 4
 } buffer_usage_flags;
 
+gl_handle graphics_create_empty_buffer(buffer_usage_flags usageFlags);
 gl_handle graphics_create_buffer(void* data, u64 size, buffer_usage_flags usageFlags);
 void graphics_update_buffer(gl_handle bufferHandle, void* data, u64 size, u64 offset);
 void graphics_destroy_buffer(gl_handle bufferHandle);

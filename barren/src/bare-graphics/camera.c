@@ -3,7 +3,9 @@
 void camera_initialize(camera *camera)
 {
     glm_vec3_zero(camera->position);
-    glm_vec3_zero(camera->target);
+    
+    vec3 target = { 0.0f, 0.0f, -1.0f };
+    glm_vec3_copy(target, camera->target);
     
     vec3 up = { 0.0f, 1.0f, 0.0f };
     glm_vec3_copy(up, camera->up);

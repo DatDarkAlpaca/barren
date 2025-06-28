@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 
 #include "shader.h"
+#include "descriptors.h"
 #include "quad-renderer.h"
 
 typedef struct quad_vertex
@@ -8,16 +9,30 @@ typedef struct quad_vertex
     vec3 position;
 } quad_vertex;
 
+typedef struct quad_mvp
+{
+    mat4 model;
+    mat4 view;
+    mat4 projection;
+} quad_mvp;
+
 static const char* QuadVertexShaderCode = 
-    "#version 330 core\n"
+    "#version 460 core\n"
     "layout (location = 0) in vec3 a_position;\n"
+    
+    "layout(binding = 0, std140) uniform buffer_mvp {\n"
+    "    mat4 model;\n"
+    "    mat4 view;\n"
+    "    mat4 projection;\n"
+    "};\n"
+    
     "void main()\n"
     "{\n"
-    "gl_Position = vec4(a_position, 1.0);\n"
-    "}";
+    "    gl_Position = projection * view * model * vec4(a_position, 1.0);\n"
+    "};\n";
 
 static const char* QuadFragmentShaderCode = 
-    "#version 330 core\n"
+    "#version 460 core\n"
     "layout (location = 0) out vec4 out_color; "
     "void main()"
     "{"
@@ -37,7 +52,7 @@ u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
 
     // Camera:
     camera_initialize(&renderer->camera);
-
+    
     // Command buffer:
     graphics_command_buffer_initialize(&renderer->commandBuffer);
 
@@ -64,10 +79,49 @@ u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
         .offset = 0,
     };
 
+    // Buffers:
+    {
+        quad_vertex vertices[4] = {
+            { .position = { -0.5f, -0.5f, 0.0f } },
+            { .position = {  0.5f, -0.5f, 0.0f } },
+            { .position = {  0.5f,  0.5f, 0.0f } },
+            { .position = { -0.5f,  0.5f, 0.0f } }
+        };
+    
+        renderer->vbo = graphics_create_buffer(vertices, sizeof(vertices), 
+            BUFFER_DYNAMIC_STORAGE
+        );
+    }
+    
+    {
+        unsigned int indices[6] = { 0, 1, 2, 2, 3, 0 };
+        renderer->ibo = graphics_create_buffer(indices, sizeof(indices), BUFFER_DYNAMIC_STORAGE);
+    }
+
+    {
+        renderer->mvpHandle = graphics_create_buffer(NULL, sizeof(quad_mvp), BUFFER_DYNAMIC_STORAGE);
+    }
+        
+    // Descriptors:
+    descriptor cameraDescriptor = 
+    {
+        .binding = 0,
+        .handle = renderer->mvpHandle,
+        .type = DESCRIPTOR_TYPE_UNIFORM_BUFFER
+    };
+    descriptor_set mainSet = 
+    {
+        .descriptors = { cameraDescriptor },
+        .descriptorAmount = 1
+    };
+
     // Pipeline:
     pipeline_creation_args pipelineArgs = {
         .attributes = { attribute0 },
         .attributeAmount = 1,
+
+        .descriptorSets = { mainSet },
+        .descriptorSetAmount = 1,
 
         .bindingDescriptions = { bindingDescription },
         .bindingDescriptionAmount = 1,
@@ -84,33 +138,22 @@ u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
         return pipelineResult.code;
 
     renderer->pipeline = pipelineResult.pipeline;
-
-    // Buffers:
-    quad_vertex vertices[4] = {
-        { .position = { -0.5f, -0.5f, 0.0f } },
-        { .position = {  0.5f, -0.5f, 0.0f } },
-        { .position = {  0.5f,  0.5f, 0.0f } },
-        { .position = { -0.5f,  0.5f, 0.0f } }
-    };
-
-    renderer->vbo = graphics_create_buffer(vertices, sizeof(vertices), 
-        BUFFER_DYNAMIC_STORAGE
-    );
-    
-    unsigned int indices[6] = { 0, 1, 2, 2, 3, 0 };
-    renderer->ibo = graphics_create_buffer(indices, sizeof(indices), BUFFER_DYNAMIC_STORAGE);
-
     return SUCCESS;
 }
 
 void quad_renderer_add_data(quad_renderer* renderer, quad_renderer_data *data)
 {
-    linear_allocator_alloc_aligned(&renderer->dataAllocator, sizeof(quad_renderer_data), sizeof(u64));
+    void* head = linear_allocator_alloc_aligned(&renderer->dataAllocator, sizeof(quad_renderer_data), sizeof(u64));
+    memcpy(head, data, sizeof(quad_renderer_data));
     ++renderer->dataAmount;
 }
 
 void quad_renderer_begin_render(quad_renderer* renderer, gl_handle target)
 {
+    // Camera:
+    camera_update_view(&renderer->camera);
+
+    // Graphics:
     graphics_begin_render(&renderer->commandBuffer, target);
     graphics_clear();
 
@@ -121,12 +164,20 @@ void quad_renderer_begin_render(quad_renderer* renderer, gl_handle target)
 }
 void quad_renderer_render(quad_renderer* renderer)
 {
+    // Set camera:
+    quad_mvp mvpData;
+    glm_mat4_copy(renderer->camera.projection, mvpData.projection);
+    glm_mat4_copy(renderer->camera.view, mvpData.view);
+
+    // Render quads:
     for(u64 i = 0; i < renderer->dataAmount; ++i)
     {
         quad_renderer_data data = renderer->dataBuffer[i];
-        data.transform;
-        data.rect;
+        update_transform_data(&data.transform);
 
+        glm_mat4_copy(data.transform.data, mvpData.model);
+
+        graphics_update_buffer(renderer->mvpHandle, &mvpData, sizeof(mvpData), 0);
         graphics_draw_indexed(&renderer->commandBuffer, 6, 1, 0, 0);
     }
 }

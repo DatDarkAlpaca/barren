@@ -14,19 +14,18 @@ static void initialize(engine* engine)
     graphics_set_clear_color(0.2f, 0.2f, 0.2f, 1.0f);
 
     // Quad:
-    vec4 position;
-    vec3 scale;
+    transform transform;
     {
-        scale[0] = 100.f;
-        scale[1] = 100.f;
-        scale[2] = 1.f;    
+        transform_initialize(&mainScene.quad0.transform);
+        
+        vec3 scale = { 150.f, 150.f, 1.f};
+        transform_set_position(&mainScene.quad0.transform, scale);
+        transform_set_scale(&mainScene.quad0.transform, scale);
+       
+        quad_renderer_add_data(&engine->context.quadRenderer, &mainScene.quad0); 
     }
-    
-    glm_mat4_identity(mainScene.quad0.transform.data);
-    glm_translate(mainScene.quad0.transform.data, position);
-    glm_scale(mainScene.quad0.transform.data, scale);
 
-    quad_renderer_add_data(&engine->context.quadRenderer, &mainScene.quad0);
+    camera_set_orthographic(&engine->context.quadRenderer.camera, 0.0f, 640.0f, 480.0f, 0.f, -1.0f, 1.0f);
 }
 
 static void update(engine* engine, f64 deltaTime)

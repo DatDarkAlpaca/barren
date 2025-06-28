@@ -22,7 +22,6 @@ void graphics_set_viewport(i32 x, i32 y, i32 width, i32 height);
 void graphics_set_scissor(i32 x, i32 y, i32 width, i32 height);
 
 void graphics_bind_pipeline(command_buffer* commandBuffer, pipeline* pipeline);
-void graphics_bind_descriptor_set(gl_handle descriptorSetHandle);
 void graphics_bind_vertex_buffer(command_buffer* commandBuffer, gl_handle bufferHandle, u32 binding, u32 stride);
 void graphics_bind_index_buffer(command_buffer* commandBuffer, gl_handle bufferHandle, buffer_index_type indexType);
 
