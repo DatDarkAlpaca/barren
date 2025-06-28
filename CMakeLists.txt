@@ -4,6 +4,7 @@ project(barren-project)
 add_subdirectory(vendor/glad)
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/cglm)
+add_subdirectory(vendor/flecs)
 
 add_subdirectory(barren)
 add_subdirectory(barren-test)
