@@ -1,8 +1,6 @@
 #include "engine.h"
 #include "window.h"
-#include "bare-graphics/graphics.h"
-
-#include <stdio.h>
+#include "graphics/graphics.h"
 
 static engine_parameters __parameters;
 

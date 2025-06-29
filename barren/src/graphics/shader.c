@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include "shader.h"
+#include "core/errors.h"
 #include "utils/string.h"
 
 shader_creation_result graphics_create_shader(shader_type type, const char* const source)

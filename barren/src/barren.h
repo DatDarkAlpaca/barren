@@ -1,10 +1,10 @@
 #pragma once
-#include "engine.h"
+#include "core/engine.h"
 
-#include "bare-graphics/buffer.h"
-#include "bare-graphics/commands.h"
-#include "bare-graphics/graphics.h"
-#include "bare-graphics/handle.h"
-#include "bare-graphics/pipeline.h"
-#include "bare-graphics/quad-renderer.h"
-#include "bare-graphics/shader.h"
+#include "graphics/buffer.h"
+#include "graphics/commands.h"
+#include "graphics/graphics.h"
+#include "graphics/handle.h"
+#include "graphics/pipeline.h"
+#include "graphics/quad-renderer.h"
+#include "graphics/shader.h"
