@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <stdlib.h>
 #include "buffer.h"
 #include "handle.h"
 

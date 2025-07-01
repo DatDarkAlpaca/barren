@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <assert.h>
+#include <stdlib.h>
 #include "commands.h"
 
 void graphics_command_buffer_initialize(command_buffer *commandBuffer)

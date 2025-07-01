@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <stdlib.h>
 #include "shader.h"
 #include "core/errors.h"
 #include "utils/string.h"

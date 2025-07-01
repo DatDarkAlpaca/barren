@@ -12,4 +12,5 @@ typedef struct scene
     ecs_world_t* ecs;
 } scene;
 
+struct context;
 void scene_initialize(scene* scene, struct context* context);
