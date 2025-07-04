@@ -1,6 +1,7 @@
 #pragma once
 #include "context.h"
 #include "common.h"
+#include "core/view.h"
 
 struct engine;
 typedef void (*engine_callback)(struct engine* engine);
@@ -30,5 +31,7 @@ u64 engine_initialize(engine* engine);
 
 void engine_set_initialize_callback(engine* engine, engine_callback callback);
 void engine_set_update_callback(engine* engine, engine_update_callback callback);
+
+view* engine_add_view(engine* engine);
 
 void engine_run(engine* engine);

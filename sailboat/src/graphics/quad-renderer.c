@@ -148,6 +148,11 @@ void quad_renderer_add_data(quad_renderer* renderer, quad_renderer_data *data)
     ++renderer->dataAmount;
 }
 
+void quad_renderer_set_camera(quad_renderer *renderer, camera camera)
+{
+    renderer->camera = camera;
+}
+
 void quad_renderer_begin_render(quad_renderer* renderer, gl_handle target)
 {
     // Camera:

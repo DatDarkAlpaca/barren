@@ -4,6 +4,9 @@
 
 void scene_initialize(scene* scene, context* context)
 {
+    assert(scene);
+    assert(context);
+
     scene->ecs = ecs_init();
     ecs_set_ctx(scene->ecs, &context, NULL);
 
