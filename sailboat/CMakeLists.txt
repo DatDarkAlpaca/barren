@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(barren)
+project(sailboat)
 
 option(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" OFF)
 option(GLFW_BUILD_TESTS "Build the GLFW test programs" OFF)

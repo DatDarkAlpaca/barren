@@ -1,4 +1,4 @@
 @echo off
 cmake -S . -B build
-msbuild build/barren-project.sln
-build\barren-test\Debug\barren_test.exe
+msbuild build/sailboat-project.sln
+build\sailboat-test\Debug\sailboat-test.exe
