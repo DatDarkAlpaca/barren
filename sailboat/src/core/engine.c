@@ -4,11 +4,11 @@
 
 static engine_parameters __parameters;
 
-void engine_set_parameters(const engine_parameters *parameters)
+void engine_set_parameters(const engine_parameters* parameters)
 {
     __parameters = *parameters;
 }
-u64 engine_initialize(engine *engine)
+u64 engine_initialize(engine* engine)
 {
     // Timing:
     engine->minimumFrameTime = __parameters.minimumFrameTime;
@@ -47,12 +47,12 @@ void engine_set_initialize_callback(engine* engine, engine_callback callback)
 {
     engine->initializeCallback = callback;
 }
-void engine_set_update_callback(engine *engine, engine_update_callback callback)
+void engine_set_update_callback(engine* engine, engine_update_callback callback)
 {
     engine->updateCallback = callback;
 }
 
-void engine_run(engine *engine)
+void engine_run(engine* engine)
 {
     engine->initializeCallback(engine);
 

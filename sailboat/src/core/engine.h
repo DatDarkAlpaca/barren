@@ -2,6 +2,7 @@
 #include "context.h"
 #include "common.h"
 
+struct engine;
 typedef void (*engine_callback)(struct engine* engine);
 typedef void (*engine_update_callback)(struct engine* engine, f64 deltaTime);
 

@@ -1,25 +1,25 @@
 #include <stdbool.h>
 #include "math.h"
 
-void transform_initialize(transform *transform)
+void transform_initialize(transform* transform)
 {
     glm_vec3_one(transform->scale);
     glm_vec3_zero(transform->position);
     glm_vec3_zero(transform->rotation);
 }
-void transform_set_position(transform *transform, vec3 position)
+void transform_set_position(transform* transform, vec3 position)
 {
     glm_vec3_copy(position, transform->position);
 }
-void transform_set_rotation(transform *transform, vec3 rotation)
+void transform_set_rotation(transform* transform, vec3 rotation)
 {
     glm_vec3_copy(rotation, transform->rotation);
 }
-void transform_set_scale(transform *transform, vec3 scale)
+void transform_set_scale(transform* transform, vec3 scale)
 {
     glm_vec3_copy(scale, transform->scale);
 }
-void update_transform_data(transform *transform)
+void update_transform_data(transform* transform)
 {
     mat4 model;
     glm_mat4_identity(model);

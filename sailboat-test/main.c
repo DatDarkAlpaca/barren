@@ -1,4 +1,4 @@
-#include <barren.h>
+#include <sailboat.h>
 #include <stdio.h>
 
 typedef struct scene
@@ -44,7 +44,7 @@ int main()
         engine_parameters parameters = { 
             .windowWidth = 640,
             .windowHeight = 480,
-            .windowTitle = "Barren v0.1",
+            .windowTitle = "Sailboat v0.1",
             .minimumFrameTime = 1.0 / 60.0
         };
         engine_set_parameters(&parameters);

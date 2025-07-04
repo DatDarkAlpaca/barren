@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <string.h>
+#include <stdlib.h>
+
+#include "shader.h"
 #include "pipeline.h"
 #include "utils/string.h"
 

@@ -28,7 +28,7 @@ gl_handle graphics_create_empty_buffer(buffer_usage_flags usageFlags)
     glNamedBufferStorage(bufferHandle, 0, NULL, usageFlags);
     return bufferHandle;
 }
-gl_handle graphics_create_buffer(void *data, u64 size, buffer_usage_flags usageFlags)
+gl_handle graphics_create_buffer(void* data, u64 size, buffer_usage_flags usageFlags)
 {
     gl_handle bufferHandle;
     glCreateBuffers(1, &bufferHandle);
@@ -52,7 +52,7 @@ gl_handle graphics_create_buffer(void *data, u64 size, buffer_usage_flags usageF
     glNamedBufferStorage(bufferHandle, size, data, flags);
     return bufferHandle;
 }
-void graphics_update_buffer(gl_handle bufferHandle, void *data, u64 size, u64 offset)
+void graphics_update_buffer(gl_handle bufferHandle, void* data, u64 size, u64 offset)
 {
     glNamedBufferSubData(bufferHandle, offset, size, data);
 }
