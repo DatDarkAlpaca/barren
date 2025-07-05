@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "core/view.h"
-#include "graphics/quad-renderer.h"
+#include "graphics/renderer/quad-renderer.h"
 
 typedef struct context
 {

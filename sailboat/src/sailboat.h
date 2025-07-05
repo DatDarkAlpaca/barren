@@ -14,5 +14,6 @@
 #include "graphics/graphics.h"
 #include "graphics/handle.h"
 #include "graphics/pipeline.h"
-#include "graphics/quad-renderer.h"
 #include "graphics/shader.h"
+
+#include "graphics/renderer/quad-renderer.h"

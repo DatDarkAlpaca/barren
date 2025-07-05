@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "window.h"
 
 u64 windowing_system_initialize()

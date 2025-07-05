@@ -3,6 +3,11 @@
 
 static void initialize_global(engine* engine)
 {
+    // Window:
+    {
+        window_set_title(engine->context.window, "Sailboat Test");
+    }
+
     // Graphics & Renderer:
     {
         camera camera;
@@ -27,11 +32,6 @@ int main()
                 .minimumFrameTime = 1.0 / 60.0
             };
             // engine_set_parameters(&parameters);  
-        }
-
-        // Automatic parameter setting:
-        {
-            window_set_title(engine.context.window, "Sailboat Test");
         }
         
         engine_set_initialize_callback(&engine, initialize_global);

@@ -1,6 +1,6 @@
 #include "render_system.h"
 
-#include "graphics/quad-renderer.h"
+#include "graphics/renderer/quad-renderer.h"
 #include "core/scene/components.h"
 #include "core/scene/scene.h"
 #include "context.h"
