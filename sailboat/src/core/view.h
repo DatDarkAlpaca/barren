@@ -1,6 +1,6 @@
 #pragma once
 #include "common.h"
-#include "scene.h"
+#include "core/scene/scene.h"
 
 typedef u64 view_handle;
 

@@ -9,7 +9,6 @@
 typedef struct quad_renderer_data
 {
     transform transform;
-    rect rect;
 } quad_renderer_data;
 
 typedef struct quad_renderer
@@ -32,6 +31,8 @@ typedef struct quad_renderer
 u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity);
 
 void quad_renderer_add_data(quad_renderer* renderer, quad_renderer_data* data);
+void quad_renderer_clear_data(quad_renderer* renderer);
+
 void quad_renderer_set_camera(quad_renderer* renderer, camera camera);
 
 void quad_renderer_begin_render(quad_renderer* renderer, gl_handle target);

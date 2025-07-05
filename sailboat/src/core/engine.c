@@ -29,6 +29,8 @@ static void on_engine_update(engine* engine, u64 frameDeltaTime)
         
         if(view->engineUpdateCallback)
             view->engineUpdateCallback(view, frameDeltaTime);
+
+        ecs_progress(view->scene.ecs, 0);
     }
 }
 

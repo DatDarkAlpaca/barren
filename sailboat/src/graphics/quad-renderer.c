@@ -147,6 +147,10 @@ void quad_renderer_add_data(quad_renderer* renderer, quad_renderer_data *data)
     memcpy(head, data, sizeof(quad_renderer_data));
     ++renderer->dataAmount;
 }
+void quad_renderer_clear_data(quad_renderer *renderer)
+{
+    renderer->dataAmount = 0;
+}
 
 void quad_renderer_set_camera(quad_renderer *renderer, camera camera)
 {
@@ -171,6 +175,7 @@ void quad_renderer_render(quad_renderer* renderer)
 {
     // Set camera:
     quad_mvp mvpData;
+    
     glm_mat4_copy(renderer->camera.projection, mvpData.projection);
     glm_mat4_copy(renderer->camera.view, mvpData.view);
 

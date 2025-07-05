@@ -20,4 +20,4 @@ file(GLOB_RECURSE SOURCES "src/*.c")
 add_library(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC src src/core src/graphics)
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw cglm glad flecs OpenGL::GL)
+target_link_libraries(${PROJECT_NAME} PUBLIC glfw cglm glad flecs::flecs_static OpenGL::GL)

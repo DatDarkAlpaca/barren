@@ -5,13 +5,13 @@ static void initialize_global(engine* engine)
 {
     // Graphics & Renderer:
     {
-        graphics_set_clear_color(0.2f, 0.2f, 0.2f, 1.0f);
-
         camera camera;
+        camera_initialize(&camera);
         camera_set_orthographic(&camera, 0.0f, 640.0f, 480.0f, 0.f, -1.0f, 1.0f);
-
+        
         quad_renderer_set_camera(&engine->context.quadRenderer, camera);
-    }   
+        graphics_set_clear_color(0.2f, 0.2f, 0.2f, 1.0f);
+    }
 }
 
 static void update_global(engine* engine, f64 frameDeltaTime)
