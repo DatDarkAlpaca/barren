@@ -9,6 +9,7 @@
 typedef struct quad_renderer_data
 {
     transform transform;
+    gl_handle textureHandle;
 } quad_renderer_data;
 
 typedef struct quad_renderer

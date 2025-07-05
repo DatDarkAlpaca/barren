@@ -6,12 +6,14 @@
 
 static void define_engine_components(ecs_world_t* world)
 {
-    ECS_COMPONENT_DEFINE(world, transform_c);
+    ECS_COMPONENT_DEFINE(world, transform_component);
+
+    ECS_COMPONENT_DEFINE(world, quad_texture_component);
 }
 
 static void define_engine_systems(ecs_world_t* world)
 {
-    ECS_SYSTEM(world, system_render_quads, EcsOnUpdate, transform_c);
+    ECS_SYSTEM(world, system_render_quads, EcsOnUpdate, transform_component, quad_texture_component);
 }
 
 void scene_initialize(scene* scene, context* context)

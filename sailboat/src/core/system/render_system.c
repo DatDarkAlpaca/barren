@@ -14,14 +14,16 @@ void system_render_quads(ecs_iter_t* it)
     assert(context);
     assert(renderer);
 
-    transform_c* transform = ecs_field(it, transform_c, 0);
+    transform_component* transform = ecs_field(it, transform_component, 0);
+    quad_texture_component* texture  = ecs_field(it, quad_texture_component, 0);
     assert(transform);
     
     for (int i = 0; i < it->count; ++i) 
     {
         quad_renderer_data data =
         {
-            .transform = transform[i].transform
+            .transform = transform[i].transform,
+            .textureHandle = texture->textureHandle
         };
 
         quad_renderer_add_data(renderer, &data);
