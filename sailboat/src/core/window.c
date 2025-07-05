@@ -21,3 +21,9 @@ u64 window_create(GLFWwindow** window, u32 width, u32 height, const char* title)
 
     return SUCCESS;
 }
+
+void window_set_title(GLFWwindow *window, const char *title)
+{
+    assert(window);
+    glfwSetWindowTitle(window, title);
+}

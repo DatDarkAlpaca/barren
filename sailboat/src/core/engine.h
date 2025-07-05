@@ -26,6 +26,8 @@ typedef struct engine_parameters
     f64 minimumFrameTime;
 } engine_parameters;
 
+extern engine_parameters sail_DefaultParameters;
+
 void engine_set_parameters(const engine_parameters* parameters);
 u64 engine_initialize(engine* engine);
 

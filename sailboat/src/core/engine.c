@@ -1,11 +1,22 @@
+#include <stdbool.h>
+
 #include "engine.h"
 #include "window.h"
 #include "graphics/graphics.h"
 
 // Parameters:
 static engine_parameters __parameters;
+static bool s_ArgumentsSet = false;
+engine_parameters sail_DefaultParameters = {
+    .windowWidth = 640,
+    .windowHeight = 480,
+    .windowTitle = "Sailboat v0.1",
+    .minimumFrameTime = 1.0 / 60.0
+};
+
 void engine_set_parameters(const engine_parameters* parameters)
 {
+    s_ArgumentsSet = true;
     __parameters = *parameters;
 }
 
@@ -38,6 +49,10 @@ static void on_engine_update(engine* engine, u64 frameDeltaTime)
 u64 engine_initialize(engine* engine)
 {
     assert(engine);
+
+    // Arguments:
+    if(!s_ArgumentsSet)
+        __parameters = sail_DefaultParameters;
 
     // Timing:
     engine->minimumFrameTime = __parameters.minimumFrameTime;

@@ -14,25 +14,28 @@ static void initialize_global(engine* engine)
     }
 }
 
-static void update_global(engine* engine, f64 frameDeltaTime)
-{
-    /* Blank */
-}
-
 int main()
 {
     engine engine = { 0 };
     {
-        engine_parameters parameters = { 
-            .windowWidth = 640,
-            .windowHeight = 480,
-            .windowTitle = "Sailboat v0.1",
-            .minimumFrameTime = 1.0 / 60.0
-        };
-        engine_set_parameters(&parameters);
+        // Manual parameter setting:
+        {
+            engine_parameters parameters = { 
+                .windowWidth = 640,
+                .windowHeight = 480,
+                .windowTitle = "Sailboat v0.1",
+                .minimumFrameTime = 1.0 / 60.0
+            };
+            // engine_set_parameters(&parameters);  
+        }
 
+        // Automatic parameter setting:
+        {
+            window_set_title(engine.context.window, "Sailboat Test");
+        }
+        
         engine_set_initialize_callback(&engine, initialize_global);
-        engine_set_update_callback(&engine, update_global);
+        // engine_set_update_callback(&engine, update_global);
 
         u64 result = engine_initialize(&engine);
         if(result)
