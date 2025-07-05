@@ -4,7 +4,7 @@
 #include <string.h>
 #include "common.h"
 #include "utils/math.h"
-#include "utils/memory.h"
+#include "utils/memory_utils.h"
 
 typedef struct linear_allocator
 {

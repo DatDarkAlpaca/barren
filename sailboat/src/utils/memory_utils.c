@@ -1,5 +1,5 @@
 #include <assert.h>
-#include "memory.h"
+#include "memory_utils.h"
 #include "utils/math.h"
 
 u64 align(u64 index, u64 alignment)
