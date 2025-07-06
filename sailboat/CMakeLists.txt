@@ -28,4 +28,14 @@ add_library(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC src src/core src/graphics)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/stb)
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw cglm glad flecs::flecs_static OpenGL::GL)
+target_include_directories(${PROJECT_NAME} PUBLIC ${vendor_includes})
+
+message(gaygaygagaygyaygagyagya ${vendor_includes})
+target_link_libraries(${PROJECT_NAME} PUBLIC 
+    vendor-dependencies 
+    glfw 
+    cglm 
+    glad 
+    flecs::flecs_static 
+    OpenGL::GL
+)

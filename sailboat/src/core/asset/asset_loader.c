@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string.h>
 #include <stb_image.h>
 #include "asset_loader.h"
 #include "asset_holder.h"

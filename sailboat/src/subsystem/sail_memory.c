@@ -1,5 +1,6 @@
 #include "platform.h"
 #include "sail_memory.h"
+#include "logging.h"
 
 typedef struct memory_statistics
 {
@@ -11,6 +12,7 @@ static struct memory_statistics s_statistics;
 
 void sail_memory_subsystem_initialize()
 {
+    SAIL_LOG_TRACE("hi");
     platform_zero_mem(&s_statistics, sizeof(memory_statistics));
 }
 

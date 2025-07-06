@@ -2,15 +2,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <signal.h>
 #include "platform.h"
 
 void platform_initialize()
 {
     
 }
-
 void platform_shutdown()
 {
+}
+
+void platform_breakpoint()
+{
+    raise(SIGINT);
 }
 
 void* platform_alloc(u64 size)

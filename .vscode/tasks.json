@@ -2,9 +2,22 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build [Debug]",
-            "type": "shell",
-            "command": "scripts/build-debug"
+            "type": "cmake",
+            "label": "CMake: build",
+            "command": "build",
+            "targets": [
+                "all"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "CMake build task"
+        },
+        {
+            "type": "cmake",
+            "label": "CMake: clean",
+            "command": "clean",
+            "problemMatcher": [],
+            "detail": "CMake clean task"
         }
     ]
 }
