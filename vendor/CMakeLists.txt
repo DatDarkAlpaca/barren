@@ -5,5 +5,5 @@ set(vendor_includes "${includes}" CACHE INTERNAL "")
 
 # log.c
 set(LOGC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/log.c/src/log.c)
-
 add_library(${PROJECT_NAME} ${LOGC_SOURCES})
+target_compile_definitions(${PROJECT_NAME} PRIVATE "LOG_USE_COLOR")
