@@ -1,8 +1,8 @@
 #pragma once
-#include "common.h"
 #include "camera.h"
 #include "pipeline.h"
 #include "commands.h"
+#include "core/common.h"
 #include "utils/math.h"
 #include "utils/linear_allocator.h"
 

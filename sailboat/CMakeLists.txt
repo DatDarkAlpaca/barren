@@ -17,6 +17,13 @@ include_directories(${OPENGL_INCLUDE_DIRS})
 
 # Project:
 file(GLOB_RECURSE SOURCES "src/*.c")
+
+# Platform:
+if (UNIX)
+    set(UNIX_SOURCES "platform/platform_linux.c")
+    list(APPEND SOURCES ${UNIX_SOURCES})
+endif (UNIX)
+
 add_library(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC src src/core src/graphics)

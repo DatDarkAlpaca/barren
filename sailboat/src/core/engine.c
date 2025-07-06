@@ -2,6 +2,7 @@
 
 #include "engine.h"
 #include "window.h"
+#include "platform.h"
 #include "graphics/graphics.h"
 
 // Parameters:
@@ -49,6 +50,9 @@ static void on_engine_update(engine* engine, u64 frameDeltaTime)
 u64 engine_initialize(engine* engine)
 {
     assert(engine);
+
+    // Platform:
+    platform_initialize();
 
     // Arguments:
     if(!s_ArgumentsSet)

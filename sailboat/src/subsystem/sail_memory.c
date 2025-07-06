@@ -1,8 +1,4 @@
-#include <string.h>
-#include <stdlib.h>
-
-#include "memory.h"
-#include "defines.h"
+#include "platform.h"
 #include "sail_memory.h"
 
 typedef struct memory_statistics
@@ -15,7 +11,7 @@ static struct memory_statistics s_statistics;
 
 void sail_memory_subsystem_initialize()
 {
-    memset(&s_statistics, 0, sizeof(memory_statistics));
+    platform_zero_mem(&s_statistics, sizeof(memory_statistics));
 }
 
 void *sail_memory_alloc(u64 size, memory_usage usage)
@@ -29,7 +25,7 @@ void *sail_memory_alloc(u64 size, memory_usage usage)
     s_statistics.totalMemoryAllocated += size;
     s_statistics.memoryUsageAllocated[usage] += size;
 
-    void* block = malloc(size);
+    void* block = platform_alloc(size);
     assert(block); // todo: error
 
     return block;
