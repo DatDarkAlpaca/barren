@@ -30,7 +30,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC src src/core src/graphics)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/stb)
 target_include_directories(${PROJECT_NAME} PUBLIC ${vendor_includes})
 
-message(gaygaygagaygyaygagyagya ${vendor_includes})
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     vendor-dependencies 
     glfw 
@@ -39,3 +38,5 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     flecs::flecs_static 
     OpenGL::GL
 )
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC $<$<CONFIG:Debug>:DEBUG>)

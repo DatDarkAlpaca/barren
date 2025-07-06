@@ -4,6 +4,8 @@
 
 void main_view_initialize(view *view)
 {
+    SAIL_LOG_DEBUG("HI");
+
     transform transform;
     {
         transform_initialize(&transform);

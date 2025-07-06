@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "platform.h"
 #include "sail_memory.h"
 #include "logging.h"

@@ -9,6 +9,8 @@
 #include "core/view.h"
 #include "core/window.h"
 
+#include "core/common.h"
+
 #include "graphics/buffer.h"
 #include "graphics/commands.h"
 #include "graphics/graphics.h"
