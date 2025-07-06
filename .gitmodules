@@ -10,3 +10,6 @@
 [submodule "vendor/stb"]
 	path = vendor/stb
 	url = https://github.com/nothings/stb
+[submodule "vendor/log.c"]
+	path = vendor/log.c
+	url = https://github.com/rxi/log.c
