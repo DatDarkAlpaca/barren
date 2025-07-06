@@ -15,6 +15,12 @@ gl_handle get_buffer_index_type(buffer_index_type type)
 
         case INDEX_TYPE_UNSIGNED_INT:
             return GL_UNSIGNED_INT;
+
+        default:
+        {
+            SAIL_LOG_FATAL("Invalid buffer index type: %d", type);
+            return invalid_handle;
+        } break;
     }
 
     return invalid_handle;

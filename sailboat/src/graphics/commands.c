@@ -65,8 +65,8 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
 
         default:
         {
-            // TODO: error
-        }
+            SAIL_LOG_FATAL("Invalid polygon mode: %d", polygonMode);
+        } break;
     }
 	glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
 
@@ -87,8 +87,8 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
 
         default:
         {
-            // TODO: error
-        }
+            SAIL_LOG_FATAL("Invalid cull mode: %d", cullMode);
+        } break;
     }
 	glCullFace(cullMode);
 
@@ -147,6 +147,11 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
                     glBindTextureUnit(descriptor->binding, descriptor->handle);
                     glBindTexture(GL_TEXTURE_2D, descriptor->handle);
                 } break;
+
+                default:
+                {
+                    SAIL_LOG_FATAL("Invalid descriptor type: %d", descriptor->type);
+                } break;
             }
         }
     }
@@ -188,6 +193,11 @@ void graphics_draw(command_buffer *commandBuffer, u32 vertexCount, u32 instanceC
         case TOPOLOGY_TRIANGLES:
             topology = GL_TRIANGLES;
             break;
+
+        default:
+        {
+            SAIL_LOG_FATAL("Invalid topology: %d", topology);
+        } break;
     }
 
     if (instanceCount == 1)
@@ -211,6 +221,11 @@ void graphics_draw_indexed(command_buffer* commandBuffer, u32 indexCount, u32 in
         case TOPOLOGY_TRIANGLES:
             topology = GL_TRIANGLES;
             break;
+
+        default:
+        {
+            SAIL_LOG_FATAL("Invalid topology: %d", topology);
+        } break;
     }
 
     if (instanceCount == 1)

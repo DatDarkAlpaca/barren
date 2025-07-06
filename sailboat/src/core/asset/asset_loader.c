@@ -4,11 +4,11 @@
 #include "asset_loader.h"
 #include "asset_holder.h"
 
-void asset_load_default_texture(asset_holder *holder, const char *filepath)
+asset_texture* asset_load_default_texture(asset_holder *holder, const char *filepath)
 {
-    asset_load_texture_spec_channels(holder, filepath, 0);
+    return asset_load_texture_spec_channels(holder, filepath, 0);
 }
-void asset_load_texture_spec_channels(asset_holder *holder, const char *filepath, u32 channels)
+asset_texture* asset_load_texture_spec_channels(asset_holder *holder, const char *filepath, u32 channels)
 {
     for (size_t i = 0; i < holder->textureCount; ++i) 
     {

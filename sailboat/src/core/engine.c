@@ -74,6 +74,12 @@ void engine_initialize(engine* engine)
     
     graphics_system_late_initialize();
 
+    // Assets:
+    asset_holder_params params = {
+        .textureCapacity = 100
+    };
+    asset_holder_initialize(&engine->context.assetHolder, &params);
+
     // Quad Renderer:
     quad_renderer_initialize(&engine->context.quadRenderer, 32000);
 

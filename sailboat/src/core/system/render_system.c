@@ -15,7 +15,7 @@ void system_render_quads(ecs_iter_t* it)
     assert(renderer);
 
     transform_component* transform = ecs_field(it, transform_component, 0);
-    quad_texture_component* texture  = ecs_field(it, quad_texture_component, 0);
+    quad_texture_component* texture  = ecs_field(it, quad_texture_component, 1);
     assert(transform);
     
     for (int i = 0; i < it->count; ++i) 
