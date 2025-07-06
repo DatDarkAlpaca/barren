@@ -63,7 +63,7 @@ u64 get_attribute_format_size(attribute_format format)
     return invalid_handle;
 }
 
-pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args *const args)
+pipeline graphics_create_pipeline(const pipeline_creation_args *const args)
 {
     pipeline pipeline = {
         .handle = invalid_handle,
@@ -93,29 +93,19 @@ pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args *
     glGetProgramiv(pipeline.handle, GL_LINK_STATUS, &success);
     if (!success)
     {
-        pipeline_creation_result result = {
-            .code = GRAPHICS_PIPELINE_CREATION_FAILED
-        };
-
         glGetProgramInfoLog(pipeline.handle, 512, NULL, infoLog);
-        safer_stringcopy(result.message, 512, infoLog);
-
-        return result;
+        SAIL_LOG_FATAL("Failed to link pipeline: %s", infoLog);
     }
 
     graphics_destroy_shader(args->vertexShader);
     graphics_destroy_shader(args->fragmentShader);
 
-    pipeline_creation_result result = {
-        .code = SUCCESS,
-        .pipeline = pipeline
-    };
-
-    return result;
+    return pipeline;
 }
 void graphics_destroy_pipeline(pipeline* pipeline)
 {
     glDeleteProgram(pipeline->handle);
+    
     pipeline->cullFace = invalid_handle;
     pipeline->frontFace = invalid_handle;
     pipeline->polygonMode = invalid_handle;

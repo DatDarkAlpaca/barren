@@ -17,5 +17,5 @@ void logging_subsystem_initialize();
     #define SAIL_LOG_INFO(...)
     #define SAIL_LOG_WARN(...)
     #define SAIL_LOG_ERROR(...)
-    #define SAIL_LOG_FATAL(...)
+    #define SAIL_LOG_FATAL(...)    { log_fatal(__VA_ARGS__); platform_breakpoint(); }   // todo: error popup
 #endif

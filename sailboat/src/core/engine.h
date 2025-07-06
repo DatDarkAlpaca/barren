@@ -29,7 +29,7 @@ typedef struct engine_parameters
 extern engine_parameters sail_DefaultParameters;
 
 void engine_set_parameters(const engine_parameters* parameters);
-u64 engine_initialize(engine* engine);
+void engine_initialize(engine* engine);
 
 void engine_set_initialize_callback(engine* engine, engine_callback callback);
 void engine_set_update_callback(engine* engine, engine_update_callback callback);

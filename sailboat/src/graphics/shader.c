@@ -4,14 +4,8 @@
 #include "core/errors.h"
 #include "utils/string.h"
 
-shader_creation_result graphics_create_shader(shader_type type, const char* const source)
+gl_handle graphics_create_shader(shader_type type, const char* const source)
 {
-    shader_creation_result result = {
-        .message = "",
-        .code = UNKNOWN_ERROR,
-        .handle = invalid_handle
-    };
-
     u32 shaderType;
     switch (type)
     {
@@ -25,8 +19,8 @@ shader_creation_result graphics_create_shader(shader_type type, const char* cons
 
         default:
         {
-            result.code = GRAPHICS_SHADER_INVALID_TYPE;
-            return result;
+            SAIL_LOG_FATAL("Invalid shader type: %d", type);
+            return invalid_handle;
         } break;
     }
 
@@ -40,14 +34,11 @@ shader_creation_result graphics_create_shader(shader_type type, const char* cons
     if (!success)
     {
         glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-        safer_stringcopy(result.message, 1024, infoLog);
-        result.code = GRAPHICS_SHADER_COMPILATION_FAILED;
-        return result;
+        SAIL_LOG_ERROR("Failed to compile shader: %s", infoLog);
+        return invalid_handle;
     }
 
-    result.code = SUCCESS;
-    result.handle = shader;
-    return result;
+    return shader;
 }
 void graphics_destroy_shader(gl_handle shaderHandle)
 {

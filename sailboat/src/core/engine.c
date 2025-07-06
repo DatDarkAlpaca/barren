@@ -47,7 +47,7 @@ static void on_engine_update(engine* engine, u64 frameDeltaTime)
 }
 
 // Engine:
-u64 engine_initialize(engine* engine)
+void engine_initialize(engine* engine)
 {
     assert(engine);
 
@@ -62,36 +62,23 @@ u64 engine_initialize(engine* engine)
     engine->minimumFrameTime = __parameters.minimumFrameTime;
 
     // Windowing & Graphics:
-    u64 windowingResult = windowing_system_initialize();
-    u64 graphicsResult = graphics_system_initialize();
-    {
-        if(windowingResult)
-            return windowingResult;
+    windowing_system_initialize();
+    graphics_system_initialize();
 
-        if(graphicsResult)
-            return graphicsResult;
-        
-        u64 windowResult = window_create(
-            &engine->context.window,
-            __parameters.windowWidth,
-            __parameters.windowHeight,
-            __parameters.windowTitle
-        );
-        if(windowResult)
-            return windowResult;
-    }
-
+    window_create(
+        &engine->context.window,
+        __parameters.windowWidth,
+        __parameters.windowHeight,
+        __parameters.windowTitle
+    );
+    
     graphics_system_late_initialize();
 
     // Quad Renderer:
-    u64 quadRendererResult = quad_renderer_initialize(&engine->context.quadRenderer, 32000);
-    if(quadRendererResult)
-        return quadRendererResult;
+    quad_renderer_initialize(&engine->context.quadRenderer, 32000);
 
     // Views (TODO: set config for max views):
     view_holder_initialize(&engine->context.viewHolder, 16);
-
-    return SUCCESS;
 }
 
 void engine_set_initialize_callback(engine* engine, engine_callback callback)

@@ -37,9 +37,7 @@ int main()
         engine_set_initialize_callback(&engine, initialize_global);
         // engine_set_update_callback(&engine, update_global);
 
-        u64 result = engine_initialize(&engine);
-        if(result)
-            return result;
+        engine_initialize(&engine);
     }
 
     view* mainView = engine_add_view(&engine);

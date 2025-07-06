@@ -24,9 +24,9 @@ void asset_load_texture_spec_channels(asset_holder *holder, const char *filepath
     asset_texture* asset = &holder->textureAssets[holder->textureCount];
     asset->data = stbi_load(filepath, &asset->width, &asset->height, &asset->channels, usedChannels);
 
-    // TODO: error management
     if(!asset->data)
     {
+        SAIL_LOG_ERROR("Failed to load texture.");
         return NULL;
     }
 

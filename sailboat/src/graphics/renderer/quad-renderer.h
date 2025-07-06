@@ -29,7 +29,7 @@ typedef struct quad_renderer
     gl_handle mvpHandle;
 } quad_renderer;
 
-u32 quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity);
+void quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity);
 
 void quad_renderer_add_data(quad_renderer* renderer, quad_renderer_data* data);
 void quad_renderer_clear_data(quad_renderer* renderer);

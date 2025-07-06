@@ -106,12 +106,5 @@ typedef struct pipeline
     pipeline_cull_face cullFace;
 } pipeline;
 
-typedef struct pipeline_creation_result
-{
-    pipeline pipeline;
-    char message[512];
-    u32 code;
-} pipeline_creation_result;
-
-pipeline_creation_result graphics_create_pipeline(const pipeline_creation_args* const args);
+pipeline graphics_create_pipeline(const pipeline_creation_args* const args);
 void graphics_destroy_pipeline(pipeline* pipeline);

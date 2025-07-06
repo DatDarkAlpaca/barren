@@ -1,26 +1,22 @@
 #include <assert.h>
 #include "window.h"
 
-u64 windowing_system_initialize()
+void windowing_system_initialize()
 {
     if(!glfwInit())
-        return GLFW_FAILED_INIT;
-
-    return SUCCESS;
+        SAIL_LOG_FATAL("Failed to initialize the windowing system");
 }
 
-u64 window_create(GLFWwindow** window, u32 width, u32 height, const char* title)
+void window_create(GLFWwindow** window, u32 width, u32 height, const char* title)
 {
     *window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!*window)
-        return GLFW_FAILED_WINDOW;
+        SAIL_LOG_FATAL("Failed to create window");
 
     glfwMakeContextCurrent(*window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-        return GLAD_FAILED_INIT;
-
-    return SUCCESS;
+        SAIL_LOG_FATAL("Failed to initialize glad");
 }
 
 void window_set_title(GLFWwindow *window, const char *title)

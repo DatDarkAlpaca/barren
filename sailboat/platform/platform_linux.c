@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <signal.h>
+#include "common.h"
 #include "platform.h"
 
 void platform_initialize()
@@ -21,7 +22,9 @@ void platform_breakpoint()
 void* platform_alloc(u64 size)
 {
     void* block = malloc(size);
-    assert(block); // TODO: logging
+    if(!block)
+        SAIL_LOG_FATAL(MEMORY_EXHAUSTED_ERROR_STR);
+    
     return block;
 }
 void platform_free(void* block)
@@ -31,5 +34,5 @@ void platform_free(void* block)
 }
 void platform_zero_mem(void* block, u64 size)
 {
-    void* _ = memset(block, 0, size);
+    memset(block, 0, size);
 }

@@ -4,7 +4,7 @@
 #include "handle.h"
 #include "common.h"
 
-u64 graphics_system_initialize();
+void graphics_system_initialize();
 void graphics_system_late_initialize();
 
 void graphics_present(GLFWwindow* window);
