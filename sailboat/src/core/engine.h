@@ -34,6 +34,6 @@ void engine_initialize(engine* engine);
 void engine_set_initialize_callback(engine* engine, engine_callback callback);
 void engine_set_update_callback(engine* engine, engine_update_callback callback);
 
-view* engine_add_view(engine* engine);
+gl_handle engine_create_texture(context* context, const char* filepath, u64 channelAmount);
 
 void engine_run(engine* engine);

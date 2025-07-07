@@ -4,6 +4,8 @@
 #include "window.h"
 #include "platform.h"
 #include "graphics/graphics.h"
+#include "core/asset/asset.h"
+#include "graphics/texture.h"
 
 // Parameters:
 static engine_parameters __parameters;
@@ -96,6 +98,36 @@ void engine_set_update_callback(engine* engine, engine_update_callback callback)
 {
     assert(engine);
     engine->updateCallback = callback;
+}
+
+gl_handle engine_create_texture(context* context, const char *filepath, u64 channelAmount)
+{
+    // Wrapper function to handle loading and graphics object creation
+
+    asset_texture* texture = asset_load_texture_spec_channels(&context->assetHolder, "res/quad.jpg", channelAmount);
+    if(!texture)
+    {
+        SAIL_LOG_ERROR("Failed to load texture");
+        return invalid_handle;
+    }
+        
+    texture_args args = { 0 };
+    {
+        args.width = texture->width;
+        args.height = texture->height;
+        args.format = TEXTURE_FORMAT_RGB8_UNORM;
+        args.type = TEXTURE_TYPE_2D;
+    }
+
+    gl_handle texture = graphics_create_texture(&args);
+    if(texture == invalid_handle)
+    {
+        SAIL_LOG_ERROR("Failed to create texture");
+        return invalid_handle;
+    }
+       
+    graphics_update_texture(texture, TEXTURE_TYPE_2D, texture);
+    return texture;
 }
 
 view *engine_add_view(engine *engine)

@@ -31,3 +31,8 @@ view* view_holder_get(view_holder* holder, view_handle handle)
 
     return &holder->views[handle];
 }
+
+ecs_entity_t view_add_entity(view *view)
+{
+    return ecs_new(view->scene.ecs);
+}
