@@ -3,17 +3,17 @@
 #include <stdlib.h>
 #include "commands.h"
 
-void graphics_command_buffer_initialize(command_buffer *commandBuffer)
+void graphics_command_buffer_initialize(command_buffer* commandBuffer)
 {
     glCreateVertexArrays(1, &commandBuffer->vao);
 }
 
-void graphics_begin_render(command_buffer *commandBuffer, gl_handle target)
+void graphics_begin_render(command_buffer* commandBuffer, gl_handle target)
 {
     glBindVertexArray(commandBuffer->vao);
     glBindFramebuffer(GL_FRAMEBUFFER, target);
 }
-void graphics_begin_render_default(command_buffer *commandBuffer)
+void graphics_begin_render_default(command_buffer* commandBuffer)
 {
     graphics_begin_render(commandBuffer, 0);
 }
@@ -37,7 +37,7 @@ void graphics_set_scissor(i32 x, i32 y, i32 width, i32 height)
     glScissor(x, y, width, height);
 }
 
-void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
+void graphics_bind_pipeline(command_buffer* commandBuffer, pipeline* pipeline)
 {
     assert(commandBuffer->vao != invalid_handle);
     assert(pipeline->handle != invalid_handle);
@@ -120,39 +120,35 @@ void graphics_bind_pipeline(command_buffer *commandBuffer, pipeline *pipeline)
 			glVertexArrayBindingDivisor(commandBuffer->vao, description->binding, divisor);
         }
     }
-
-    // Descriptors:
-    for(u64 i = 0; i < pipeline->descriptorSetAmount; ++i)
+}
+void graphics_bind_descriptor_set(command_buffer *commandBuffer, const descriptor_set *const set)
+{
+    for(u64 j = 0; j < set->descriptorAmount; ++j)
     {
-        descriptor_set* set = &pipeline->descriptorSets[i];
-
-        for(u64 j = 0; j < set->descriptorAmount; ++j)
-        {
-            descriptor* descriptor = &set->descriptors[j];
+        descriptor* descriptor = &set->descriptors[j];
             
-            switch(descriptor->type)
+        switch(descriptor->type)
+        {
+            case DESCRIPTOR_TYPE_UNIFORM_BUFFER:
             {
-                case DESCRIPTOR_TYPE_UNIFORM_BUFFER:
-                {
-                    glBindBufferBase(GL_UNIFORM_BUFFER, descriptor->binding, descriptor->handle);
-                } break;
+                glBindBufferBase(GL_UNIFORM_BUFFER, descriptor->binding, descriptor->handle);
+            } break;
 
-                case DESCRIPTOR_TYPE_SHADER_STORAGE_BUFFER:
-                {
-                    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, descriptor->binding, descriptor->handle);
-                } break;
+            case DESCRIPTOR_TYPE_SHADER_STORAGE_BUFFER:
+            {
+                glBindBufferBase(GL_SHADER_STORAGE_BUFFER, descriptor->binding, descriptor->handle);
+            } break;
 
-                case DESCRIPTOR_TYPE_COMBINED_TEXTURE_SAMPLER:
-                {
-                    glBindTextureUnit(descriptor->binding, descriptor->handle);
-                    glBindTexture(GL_TEXTURE_2D, descriptor->handle);
-                } break;
+            case DESCRIPTOR_TYPE_COMBINED_TEXTURE_SAMPLER:
+            {
+                glBindTextureUnit(descriptor->binding, descriptor->handle);
+                glBindTexture(GL_TEXTURE_2D, descriptor->handle);
+            } break;
 
-                default:
-                {
-                    SAIL_LOG_FATAL("Invalid descriptor type: %d", descriptor->type);
-                } break;
-            }
+            default:
+            {
+                SAIL_LOG_FATAL("Invalid descriptor type: %d", descriptor->type);
+            } break;
         }
     }
 }
@@ -163,7 +159,7 @@ void graphics_bind_vertex_buffer(command_buffer *commandBuffer, gl_handle buffer
 
     glVertexArrayVertexBuffer(commandBuffer->vao, binding, bufferHandle, 0, stride);
 }
-void graphics_bind_index_buffer(command_buffer *commandBuffer, gl_handle bufferHandle, buffer_index_type indexType)
+void graphics_bind_index_buffer(command_buffer* commandBuffer, gl_handle bufferHandle, buffer_index_type indexType)
 {
     assert(commandBuffer->vao != invalid_handle);
     assert(bufferHandle != invalid_handle);
@@ -172,7 +168,7 @@ void graphics_bind_index_buffer(command_buffer *commandBuffer, gl_handle bufferH
     glVertexArrayElementBuffer(commandBuffer->vao, bufferHandle);
 }
 
-void graphics_draw(command_buffer *commandBuffer, u32 vertexCount, u32 instanceCount, u32 firstVertex, u32 firstInstance)
+void graphics_draw(command_buffer* commandBuffer, u32 vertexCount, u32 instanceCount, u32 firstVertex, u32 firstInstance)
 {
     assert(instanceCount >= 1);
     assert(firstVertex >= 0);
@@ -234,7 +230,7 @@ void graphics_draw_indexed(command_buffer* commandBuffer, u32 indexCount, u32 in
         glDrawElementsInstanced(topology, indexCount, get_buffer_index_type(commandBuffer->indexType), NULL, instanceCount);
 }
 
-void graphics_end_render(command_buffer *commandBuffer)
+void graphics_end_render(command_buffer* commandBuffer)
 {
     graphics_begin_render_default(commandBuffer);
 }

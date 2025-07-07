@@ -7,5 +7,6 @@ typedef struct asset_texture
     byte* data;
     u32 width;
     u32 height;
+    u32 depth;
     u32 channels;
 } asset_texture;

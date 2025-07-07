@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <stdbool.h>
 #include "texture.h"
+#include "core/asset/asset.h"
 
 static gl_handle get_wrap_mode(wrap_mode mode)
 {
@@ -19,7 +20,7 @@ static gl_handle get_wrap_mode(wrap_mode mode)
 			return GL_CLAMP_TO_BORDER;
 	}
 
-    SAIL_LOG_ERROR("Invalid/unspecified texture wrap mode: %d. Default: GL_REPEAT", mode);
+    SAIL_LOG_WARN("Invalid/unspecified texture wrap mode: %d. Default: GL_REPEAT", mode);
 	return GL_REPEAT;
 }
 
@@ -59,7 +60,7 @@ static gl_handle get_filter_mode(filter_mode mode, bool isMinFilter)
 				return GL_LINEAR;
 		}
 	}
-	SAIL_LOG_ERROR("Invalid/ unspecified texture filter mode: %d. Default: GL_NEAREST", mode);
+	SAIL_LOG_WARN("Invalid/ unspecified texture filter mode: %d. Default: GL_NEAREST", mode);
 	return GL_REPEAT;
 }
 
@@ -88,7 +89,7 @@ static gl_handle get_texture_format(texture_format format)
 		case TEXTURE_FORMAT_BGRA8_UNORM:
 			return GL_BGRA;
 	}
-	SAIL_LOG_ERROR("Invalid/unspecified texture format: %d. Default: GL_RGBA", format);
+	SAIL_LOG_WARN("Invalid/unspecified texture format: %d. Default: GL_RGBA", format);
 	return GL_RGBA;
 }
 
@@ -97,15 +98,15 @@ gl_handle graphics_create_texture(const texture_args* const args)
     u64 target;
     switch(args->type)
     {
-        case TEXTURE_2D: 
+        case TEXTURE_TYPE_2D: 
             target = GL_TEXTURE_2D;
             break;
 
-        case TEXTURE_2D_ARRAY: 
+        case TEXTURE_TYPE_2D_ARRAY: 
             target = GL_TEXTURE_2D_ARRAY;
             break;
 
-        case TEXTURE_3D: 
+        case TEXTURE_TYPE_3D: 
             target = GL_TEXTURE_3D;
             break;
 
@@ -123,7 +124,7 @@ gl_handle graphics_create_texture(const texture_args* const args)
 
     glTextureParameteri(texture, GL_TEXTURE_WRAP_S, get_wrap_mode(args->wrapS));
 	glTextureParameteri(texture, GL_TEXTURE_WRAP_T, get_wrap_mode(args->wrapT));
-	if (args->type == TEXTURE_3D)
+	if (args->type == TEXTURE_TYPE_3D)
 		glTextureParameteri(texture, GL_TEXTURE_WRAP_R, get_wrap_mode(args->wrapR));
 
 	glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, get_filter_mode(args->minFilter, args->generateMipmaps));
@@ -135,7 +136,7 @@ gl_handle graphics_create_texture(const texture_args* const args)
     gl_handle textureFormat = get_texture_format(args->format);
     switch (args->type)
 	{
-		case TEXTURE_2D:
+		case TEXTURE_TYPE_2D:
 			glTextureStorage2D(
 				texture,
 				1,
@@ -145,8 +146,8 @@ gl_handle graphics_create_texture(const texture_args* const args)
 			);
 			break;
         
-		case TEXTURE_2D_ARRAY:
-		case TEXTURE_3D:
+		case TEXTURE_TYPE_2D_ARRAY:
+		case TEXTURE_TYPE_3D:
 			glTextureStorage3D(
 				texture,
 				1,
@@ -159,4 +160,42 @@ gl_handle graphics_create_texture(const texture_args* const args)
 	}
 
     return texture;
+}
+void graphics_update_texture(gl_handle textureHandle, texture_type type, asset_texture* asset)
+{
+	gl_handle dataFormat = GL_RGB;
+
+	// TODO: float textures & data formats
+	// gl_handle dataFormat = get_texture_data_format(asset->dataFormat);
+	// gl_handle dataType = !asset.floatTexture ? GL_UNSIGNED_BYTE : GL_FLOAT;
+
+	switch (type)
+	{
+		case TEXTURE_TYPE_2D:
+			glTextureSubImage2D(
+				textureHandle, 
+				0, 
+				0, 0, 
+				asset->width, asset->height,
+				dataFormat, GL_UNSIGNED_BYTE, asset->data
+			);
+			break;
+
+		case TEXTURE_TYPE_2D_ARRAY:
+		case TEXTURE_TYPE_3D:
+			glTextureSubImage3D(
+				textureHandle, 
+				0, 
+				0, 0, 0,
+				asset->width, asset->height, asset->depth, 
+				dataFormat, GL_UNSIGNED_BYTE, 
+				asset->data
+			);
+			break;
+
+		default:
+		{
+			SAIL_LOG_ERROR("Invalid texture descriptor type on update");
+		} break;
+	}
 }

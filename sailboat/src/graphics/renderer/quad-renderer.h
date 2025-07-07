@@ -23,9 +23,12 @@ typedef struct quad_renderer
     u64 maxDataCapacity;
 
     pipeline pipeline;
+    descriptor_set descriptorSet;
     gl_handle vao;
     gl_handle vbo;
     gl_handle ibo;
+
+    gl_handle textureHandle;
     gl_handle mvpHandle;
 } quad_renderer;
 

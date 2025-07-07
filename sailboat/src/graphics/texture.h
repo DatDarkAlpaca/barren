@@ -3,16 +3,16 @@
 
 typedef enum texture_type
 {
-    TEXTURE_UNDEFINED = 0,
-    TEXTURE_2D,
-    TEXTURE_2D_ARRAY,
-    TEXTURE_3D
+    TEXTURE_TYPE_UNDEFINED = 0,
+    TEXTURE_TYPE_2D,
+    TEXTURE_TYPE_2D_ARRAY,
+    TEXTURE_TYPE_3D
 } texture_type;
 
 typedef enum wrap_mode
 {
     WRAP_MODE_UNDEFINED = 0,
-    WRAP_MODE_REPEAT = 0,
+    WRAP_MODE_REPEAT,
     WRAP_MODE_MIRRORED_REPEAT,
     WRAP_MODE_CLAMP_TO_EDGE,
     WRAP_MODE_CLAMP_TO_BORDER
@@ -61,3 +61,6 @@ typedef struct texture_args
 } texture_args;
 
 gl_handle graphics_create_texture(const texture_args* const args);
+
+struct asset_texture;
+void graphics_update_texture(gl_handle textureHandle, texture_type type, struct asset_texture* asset);
