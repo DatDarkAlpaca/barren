@@ -36,4 +36,6 @@ void engine_set_update_callback(engine* engine, engine_update_callback callback)
 
 gl_handle engine_create_texture(context* context, const char* filepath, u64 channelAmount);
 
+view *engine_add_view(engine *engine);
+
 void engine_run(engine* engine);

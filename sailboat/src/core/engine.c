@@ -3,6 +3,7 @@
 #include "engine.h"
 #include "window.h"
 #include "platform.h"
+#include "core/asset/asset_loader.h"
 #include "graphics/graphics.h"
 #include "core/asset/asset.h"
 #include "graphics/texture.h"
@@ -104,8 +105,8 @@ gl_handle engine_create_texture(context* context, const char *filepath, u64 chan
 {
     // Wrapper function to handle loading and graphics object creation
 
-    asset_texture* texture = asset_load_texture_spec_channels(&context->assetHolder, "res/quad.jpg", channelAmount);
-    if(!texture)
+    asset_texture* asset = asset_load_texture_spec_channels(&context->assetHolder, "res/quad.jpg", channelAmount);
+    if(!asset)
     {
         SAIL_LOG_ERROR("Failed to load texture");
         return invalid_handle;
@@ -113,8 +114,8 @@ gl_handle engine_create_texture(context* context, const char *filepath, u64 chan
         
     texture_args args = { 0 };
     {
-        args.width = texture->width;
-        args.height = texture->height;
+        args.width = asset->width;
+        args.height = asset->height;
         args.format = TEXTURE_FORMAT_RGB8_UNORM;
         args.type = TEXTURE_TYPE_2D;
     }
@@ -126,7 +127,7 @@ gl_handle engine_create_texture(context* context, const char *filepath, u64 chan
         return invalid_handle;
     }
        
-    graphics_update_texture(texture, TEXTURE_TYPE_2D, texture);
+    graphics_update_texture(texture, TEXTURE_TYPE_2D, asset);
     return texture;
 }
 

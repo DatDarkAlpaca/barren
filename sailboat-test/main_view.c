@@ -22,7 +22,7 @@ void main_view_initialize(view *view)
     {
         transform_initialize(&transform);
 
-        vec3 position = {100.0f, 100.f, 0.0f};
+        vec3 position = {200.0f, 100.f, 0.0f};
         transform_set_position(&transform, position);
 
         vec3 scale = { 100.0f, 100.0f, 1.0f };
