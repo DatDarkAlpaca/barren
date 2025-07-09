@@ -19,18 +19,26 @@ static void initialize_global(engine* engine)
     }
 }
 
-static bool on_window_close_clbk(void* args)
+static bool on_window_close_clbk(event _, void* args)
 {
     engine* e = (engine*)args;
     printf("Window closing. Last delta time: %f\n", e->context.frameDeltaTime);
-
     return false;
+}
+
+static bool on_window_resize(event event, void* args)
+{
+    engine* e = (engine*)args;
+    int* sizes = (int*)event.data;
+    printf("Window resize: %d, %d\n", sizes[0], sizes[1]);
+    return true;
 }
 
 static void on_event(engine* engine, event event)
 {
     notifier notifier = { .event = &event };
     notifier_notify(&notifier, EVT_WINDOW_CLOSE, on_window_close_clbk, engine);
+    notifier_notify(&notifier, EVT_WINDOW_RESIZE, on_window_resize, engine);
 }
 
 int main()
