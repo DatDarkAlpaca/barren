@@ -3,14 +3,16 @@
 #include <GLFW/glfw3.h>
 
 #include "core/view.h"
-#include "core/asset/asset_holder.h"
+#include "core/ephemeral/ephemeral.h"
 #include "graphics/renderer/quad-renderer.h"
 
 typedef struct context
 {
     GLFWwindow* window;
 
-    asset_holder assetHolder;
+    ephemeral ephemeralSystem;
     view_holder viewHolder;
     quad_renderer quadRenderer;
+
+    f32 frameDeltaTime;
 } context;

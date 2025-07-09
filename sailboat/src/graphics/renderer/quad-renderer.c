@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <stdlib.h>
 
 #include "shader.h"
 #include "descriptors.h"
@@ -58,7 +59,7 @@ void quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
         renderer->dataAmount = 0;
         renderer->dataBuffer = (quad_renderer_data*)malloc(quadDataCapacity);
     }
-    linear_allocator_initialize(&renderer->dataAllocator, renderer->dataBuffer, quadDataCapacity);
+    sail_linear_allocator_initialize_external(&renderer->dataAllocator, renderer->dataBuffer, quadDataCapacity);
 
     // Camera:
     camera_initialize(&renderer->camera);
@@ -154,7 +155,7 @@ void quad_renderer_initialize(quad_renderer* renderer, u64 maxDataCapacity)
 
 void quad_renderer_add_data(quad_renderer* renderer, quad_renderer_data *data)
 {
-    void* head = linear_allocator_alloc_aligned(&renderer->dataAllocator, sizeof(quad_renderer_data), sizeof(u64));
+    void* head = sail_linear_allocator_alloc_aligned(&renderer->dataAllocator, sizeof(quad_renderer_data), sizeof(u64));
     memcpy(head, data, sizeof(quad_renderer_data));
     ++renderer->dataAmount;
 }

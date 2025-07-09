@@ -1,8 +1,7 @@
 #include "scene.h"
 #include "context.h"
 #include "components.h"
-
-#include "core/system/render_system.h"
+#include "core/scene/system/render_system.h"
 
 static scene_handle s_currentHandle = 0;
 

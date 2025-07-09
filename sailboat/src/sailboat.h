@@ -1,12 +1,10 @@
 #pragma once
 #include "core/scene/components.h"
 #include "core/scene/scene.h"
+#include "core/scene/system/render_system.h"
 
-#include "core/system/render_system.h"
-
-#include "core/asset/asset.h"
-#include "core/asset/asset_holder.h"
-#include "core/asset/asset_loader.h"
+#include "core/ephemeral/asset.h"
+#include "core/ephemeral/ephemeral.h"
 
 #include "core/context.h"
 #include "core/engine.h"

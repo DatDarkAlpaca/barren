@@ -4,7 +4,7 @@
 #include "commands.h"
 #include "core/common.h"
 #include "utils/math.h"
-#include "utils/linear_allocator.h"
+#include "subsystem/sail_memory.h"
 
 typedef struct quad_renderer_data
 {
@@ -17,7 +17,7 @@ typedef struct quad_renderer
     command_buffer commandBuffer;
     camera camera;
     
-    linear_allocator dataAllocator;
+    sail_linear_allocator dataAllocator;
     quad_renderer_data* dataBuffer;
     u64 dataAmount;
     u64 maxDataCapacity;

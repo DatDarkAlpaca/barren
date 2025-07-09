@@ -3,10 +3,8 @@
 #include "engine.h"
 #include "window.h"
 #include "platform.h"
-#include "core/asset/asset_loader.h"
-#include "graphics/graphics.h"
-#include "core/asset/asset.h"
 #include "graphics/texture.h"
+#include "graphics/graphics.h"
 
 // Parameters:
 static engine_parameters __parameters;
@@ -77,11 +75,8 @@ void engine_initialize(engine* engine)
     
     graphics_system_late_initialize();
 
-    // Assets:
-    asset_holder_params params = {
-        .textureCapacity = 100
-    };
-    asset_holder_initialize(&engine->context.assetHolder, &params);
+    // Ephemeral:
+    ephemeral_initialize(&engine->context.ephemeralSystem, 100);
 
     // Quad Renderer:
     quad_renderer_initialize(&engine->context.quadRenderer, 32000);
@@ -104,8 +99,7 @@ void engine_set_update_callback(engine* engine, engine_update_callback callback)
 gl_handle engine_create_texture(context* context, const char *filepath, u64 channelAmount)
 {
     // Wrapper function to handle loading and graphics object creation
-
-    asset_texture* asset = asset_load_texture_spec_channels(&context->assetHolder, "res/quad.jpg", channelAmount);
+    asset_texture* asset = ephemeral_imm_load_texture(&context->ephemeralSystem, "res/quad.jpg");
     if(!asset)
     {
         SAIL_LOG_ERROR("Failed to load texture");
@@ -171,6 +165,8 @@ void engine_run(engine* engine)
             glfwPollEvents();
 
             {
+                engine->context.frameDeltaTime = frameDeltaTime;
+
                 if(engine->updateCallback)
                     engine->updateCallback(engine, frameDeltaTime);
 

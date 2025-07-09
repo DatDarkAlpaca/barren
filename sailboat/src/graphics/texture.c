@@ -1,7 +1,7 @@
 #include <glad/glad.h>
 #include <stdbool.h>
 #include "texture.h"
-#include "core/asset/asset.h"
+#include "core/ephemeral/asset.h"
 
 static gl_handle get_wrap_mode(wrap_mode mode)
 {
