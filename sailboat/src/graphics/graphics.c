@@ -13,7 +13,7 @@ void graphics_system_late_initialize()
     glEnable(GL_DEPTH_TEST);
 }
 
-void graphics_present(GLFWwindow *window)
+void graphics_present(windowing_system* window)
 {
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(window->window);
 }

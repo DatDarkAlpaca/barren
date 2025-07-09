@@ -2,10 +2,12 @@
 #include "common.h"
 #include "core/context.h"
 #include "core/view/view.h"
+#include "core/event/event.h"
 
 struct engine;
-typedef void (*engine_callback)(struct engine* engine);
-typedef void (*engine_update_callback)(struct engine* engine, f64 deltaTime);
+typedef void (*engine_callback)(struct engine*);
+typedef void (*engine_update_callback)(struct engine*, f64);
+typedef void (*engine_event_callback)(struct engine*, event event);
 
 typedef struct engine
 {
@@ -13,6 +15,7 @@ typedef struct engine
 
     engine_callback initializeCallback;
     engine_update_callback updateCallback;
+    engine_event_callback eventCallback;
 
     f64 minimumFrameTime;
 } engine;
@@ -33,6 +36,7 @@ void engine_initialize(engine* engine);
 
 void engine_set_initialize_callback(engine* engine, engine_callback callback);
 void engine_set_update_callback(engine* engine, engine_update_callback callback);
+void engine_set_event_callback(engine* engine, engine_event_callback callback);
 
 gl_handle engine_create_texture(context* context, const char* filepath, u64 channelAmount);
 

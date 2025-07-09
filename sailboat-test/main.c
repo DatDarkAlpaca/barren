@@ -5,7 +5,7 @@ static void initialize_global(engine* engine)
 {
     // Window:
     {
-        window_set_title(engine->context.window, "Sailboat Test");
+        window_set_title(&engine->context.windowingSystem, "Sailboat Test");
     }
 
     // Graphics & Renderer:
@@ -17,6 +17,20 @@ static void initialize_global(engine* engine)
         quad_renderer_set_camera(&engine->context.quadRenderer, camera);
         graphics_set_clear_color(0.2f, 0.2f, 0.2f, 1.0f);
     }
+}
+
+static bool on_window_close_clbk(void* args)
+{
+    engine* e = (engine*)args;
+    printf("Window closing. Last delta time: %f\n", e->context.frameDeltaTime);
+
+    return false;
+}
+
+static void on_event(engine* engine, event event)
+{
+    notifier notifier = { .event = &event };
+    notifier_notify(&notifier, EVT_WINDOW_CLOSE, on_window_close_clbk, engine);
 }
 
 int main()
@@ -36,6 +50,7 @@ int main()
         
         engine_set_initialize_callback(&engine, initialize_global);
         // engine_set_update_callback(&engine, update_global);
+        engine_set_event_callback(&engine, on_event);
 
         engine_initialize(&engine);
     }

@@ -1,7 +1,7 @@
 #include <stdbool.h>
 
 #include "engine.h"
-#include "window.h"
+#include "core/window/window.h"
 #include "platform.h"
 #include "graphics/texture.h"
 #include "graphics/graphics.h"
@@ -47,6 +47,12 @@ static void on_engine_update(engine* engine, u64 frameDeltaTime)
     }
 }
 
+// Engine wrapper callbacks:
+static void on_engine_event(engine* engine, event event)
+{
+    
+}
+
 // Engine:
 void engine_initialize(engine* engine)
 {
@@ -63,11 +69,11 @@ void engine_initialize(engine* engine)
     engine->minimumFrameTime = __parameters.minimumFrameTime;
 
     // Windowing & Graphics:
-    windowing_system_initialize();
+    windowing_system_initialize(&engine->context.windowingSystem, engine, engine->eventCallback);
     graphics_system_initialize();
 
     window_create(
-        &engine->context.window,
+        &engine->context.windowingSystem,
         __parameters.windowWidth,
         __parameters.windowHeight,
         __parameters.windowTitle
@@ -94,6 +100,11 @@ void engine_set_update_callback(engine* engine, engine_update_callback callback)
 {
     assert(engine);
     engine->updateCallback = callback;
+}
+void engine_set_event_callback(engine *engine, engine_event_callback callback)
+{
+    assert(engine);
+    engine->eventCallback = callback;
 }
 
 gl_handle engine_create_texture(context* context, const char *filepath, u64 channelAmount)
@@ -151,7 +162,7 @@ void engine_run(engine* engine)
     f64 currentTime = previousTime;
     f64 previousFrameTime = previousTime;
     f64 accumulatedTime = 0, deltaTime = 0;
-    while (!glfwWindowShouldClose(engine->context.window))
+    while (!glfwWindowShouldClose(engine->context.windowingSystem.window))
     {
         currentTime = glfwGetTime();
         deltaTime = currentTime - previousTime;
@@ -175,7 +186,7 @@ void engine_run(engine* engine)
                 on_engine_update(engine, frameDeltaTime);
             }
 
-            graphics_present(engine->context.window);
+            graphics_present(&engine->context.windowingSystem);
         }
     }
 }

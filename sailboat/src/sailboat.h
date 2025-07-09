@@ -8,7 +8,11 @@
 
 #include "core/context.h"
 #include "core/engine.h"
-#include "core/window.h"
+#include "core/window/window.h"
+
+#include "core/event/event.h"
+#include "core/event/notifier.h"
+#include "core/event/event_types.h"
 
 #include "core/view/view.h"
 #include "core/view/view_holder.h"
