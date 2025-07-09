@@ -121,7 +121,7 @@ void graphics_bind_pipeline(command_buffer* commandBuffer, pipeline* pipeline)
         }
     }
 }
-void graphics_bind_descriptor_set(command_buffer *commandBuffer, const descriptor_set *const set)
+void graphics_bind_descriptor_set(command_buffer *commandBuffer, descriptor_set* set)
 {
     for(u64 j = 0; j < set->descriptorAmount; ++j)
     {

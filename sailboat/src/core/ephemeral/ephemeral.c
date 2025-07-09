@@ -15,29 +15,34 @@ void ephemeral_initialize(ephemeral* ephemeral, u64 textureCapacity)
     );
 }
 
-asset_texture* ephemeral_get_texture_by_name(ephemeral* ephemeral, const char* filepath)
+asset_texture* ephemeral_get_texture(ephemeral* ephemeral, asset_texture_handle handle)
 {
     assert(ephemeral);
+    assert(handle >= 0);
+    assert(handle < ephemeral->textureAllocator.currentIndex);
 
-    asset_texture* texture = NULL;
-    for(u64 i = 0; i < ephemeral->textureAllocator.currentIndex; ++i)
+    asset_texture* texture = &ephemeral->textures[handle]; 
+    if(!texture)
     {
-        texture = &ephemeral->textures[i];
-        if(texture && strcmp(texture->filepath, filepath) != 0)
-            continue;
+        SAIL_LOG_FATAL("Attempted to fetch texture at invalid handle: %d", handle);
+        return NULL;
     }
 
     return texture;
 }
 
-asset_texture* ephemeral_imm_load_texture(ephemeral* ephemeral, const char* filepath)
+asset_texture_handle ephemeral_imm_load_texture(ephemeral* ephemeral, const char* filepath)
 {
     assert(ephemeral);
     
-    asset_texture* texture;
-    if(texture = ephemeral_get_texture_by_name(ephemeral, filepath))
-        return texture;
+    asset_texture* texture = NULL;
+    for(asset_texture_handle i = 0; i < ephemeral->textureAllocator.currentIndex; ++i)
+    {
+        if(strcmp(filepath, ephemeral->textures[i].filepath) == 0)
+            return i;
+    }
 
+    u64 textureHandle = ephemeral->textureAllocator.currentIndex;
     texture = (asset_texture*)sail_linear_allocator_alloc_aligned(
         &ephemeral->textureAllocator,
         sizeof(asset_texture),
@@ -45,14 +50,14 @@ asset_texture* ephemeral_imm_load_texture(ephemeral* ephemeral, const char* file
     );
 
     // TODO: wrap this in another thread
+    texture->filepath = strdup(filepath);
     texture->data = stbi_load(filepath, &texture->width, &texture->height, &texture->channels, 0);
 
     if(!texture->data)
     {
         SAIL_LOG_ERROR("Failed to load texture.");
-        return NULL;
+        return invalid_handle;
     }
 
-    texture->filepath = strdup(filepath);
-    return texture;    
+    return textureHandle;
 }

@@ -99,7 +99,8 @@ void engine_set_update_callback(engine* engine, engine_update_callback callback)
 gl_handle engine_create_texture(context* context, const char *filepath, u64 channelAmount)
 {
     // Wrapper function to handle loading and graphics object creation
-    asset_texture* asset = ephemeral_imm_load_texture(&context->ephemeralSystem, "res/quad.jpg");
+    asset_texture_handle assetHandle = ephemeral_imm_load_texture(&context->ephemeralSystem, "res/quad.jpg");
+    asset_texture* asset = ephemeral_get_texture(&context->ephemeralSystem, assetHandle);
     if(!asset)
     {
         SAIL_LOG_ERROR("Failed to load texture");

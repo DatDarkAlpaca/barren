@@ -10,3 +10,5 @@ typedef struct asset_texture
     u32 depth;
     u32 channels;
 } asset_texture;
+
+typedef u64 asset_texture_handle;

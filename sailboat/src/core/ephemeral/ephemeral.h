@@ -27,6 +27,6 @@ typedef struct ephemeral
 } ephemeral;
 
 void ephemeral_initialize(ephemeral* ephemeral, u64 textureCapacity);
-asset_texture* ephemeral_get_texture_by_name(ephemeral* ephemeral, const char* filepath);
+asset_texture* ephemeral_get_texture(ephemeral* ephemeral, asset_texture_handle handle);
 
-asset_texture* ephemeral_imm_load_texture(ephemeral* ephemeral, const char* filepath);
+asset_texture_handle ephemeral_imm_load_texture(ephemeral* ephemeral, const char* filepath);
