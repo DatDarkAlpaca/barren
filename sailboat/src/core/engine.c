@@ -25,7 +25,7 @@ void engine_set_parameters(const engine_parameters* parameters)
 // View callbacks:
 static void on_engine_initialize(engine* engine)
 {
-    for(u64 i = 0; i < engine->context.viewHolder.currentView; ++i)
+    for(u64 i = 0; i < engine->context.viewHolder.viewAllocator.currentItem; ++i)
     {
         view* view = view_holder_get(&engine->context.viewHolder, i);
         
@@ -36,14 +36,14 @@ static void on_engine_initialize(engine* engine)
 
 static void on_engine_update(engine* engine, u64 frameDeltaTime)
 {
-    for(u64 i = 0; i < engine->context.viewHolder.currentView; ++i)
+    for(u64 i = 0; i < engine->context.viewHolder.viewAllocator.currentItem; ++i)
     {
         view* view = view_holder_get(&engine->context.viewHolder, i);
         
         if(view->engineUpdateCallback)
             view->engineUpdateCallback(view, frameDeltaTime);
 
-        ecs_progress(view->scene.ecs, 0);
+        ecs_progress(view->currentScene->ecs, 0);
     }
 }
 
@@ -126,12 +126,13 @@ gl_handle engine_create_texture(context* context, const char *filepath, u64 chan
     return texture;
 }
 
-view *engine_add_view(engine *engine)
+view* engine_add_view(engine* engine)
 {
     view_handle handle = view_holder_add(&engine->context.viewHolder);
     view* view = view_holder_get(&engine->context.viewHolder, handle);
 
-    scene_initialize(&view->scene, &engine->context);
+    scene_initialize(&view->mainScene, &engine->context);
+    view_swap_current_scene(view, &view->mainScene);
     view->context = &engine->context;
 
     return view;

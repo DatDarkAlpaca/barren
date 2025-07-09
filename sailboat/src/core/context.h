@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "core/view.h"
+#include "core/view/view_holder.h"
 #include "core/ephemeral/ephemeral.h"
 #include "graphics/renderer/quad-renderer.h"
 

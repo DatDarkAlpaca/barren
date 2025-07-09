@@ -53,8 +53,8 @@ void main_view_initialize(view *view)
     }
     
     ecs_entity_t entity = view_add_entity(view);
-    ecs_set(view->scene.ecs, entity, transform_component, { .transform = transform });
-    ecs_set(view->scene.ecs, entity, quad_texture_component, { .textureHandle = s_data.quadTexture });
+    ecs_set(view->currentScene->ecs, entity, transform_component, { .transform = transform });
+    ecs_set(view->currentScene->ecs, entity, quad_texture_component, { .textureHandle = s_data.quadTexture });
 
-    ECS_SYSTEM(view->scene.ecs, main_view_move, EcsOnUpdate, transform_component);
+    ECS_SYSTEM(view->currentScene->ecs, main_view_move, EcsOnUpdate, transform_component);
 }

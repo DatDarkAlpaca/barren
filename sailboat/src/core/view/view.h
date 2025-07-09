@@ -13,19 +13,13 @@ typedef struct view
     on_engine_init_clbk engineInitCallback;
     on_engine_update_clbk engineUpdateCallback;
 
-    scene scene;
+    scene mainScene;
+    scene* currentScene;
     struct context* context;
 } view;
 
-typedef struct view_holder
-{
-    view* views;
-    u64 currentView;
-    u64 capacity;
-} view_holder;
-
-void view_holder_initialize(view_holder* holder, u64 capacity);
-view_handle view_holder_add(view_holder* holder);
-view* view_holder_get(view_holder* holder, view_handle handle);
+void view_initialize(view* view);
 
 ecs_entity_t view_add_entity(view* view);
+
+void view_swap_current_scene(view* view, scene* newScene);

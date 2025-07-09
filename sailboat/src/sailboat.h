@@ -8,8 +8,10 @@
 
 #include "core/context.h"
 #include "core/engine.h"
-#include "core/view.h"
 #include "core/window.h"
+
+#include "core/view/view.h"
+#include "core/view/view_holder.h"
 
 #include "core/common.h"
 

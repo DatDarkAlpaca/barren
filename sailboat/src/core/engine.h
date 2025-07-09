@@ -1,7 +1,7 @@
 #pragma once
-#include "context.h"
 #include "common.h"
-#include "core/view.h"
+#include "core/context.h"
+#include "core/view/view.h"
 
 struct engine;
 typedef void (*engine_callback)(struct engine* engine);

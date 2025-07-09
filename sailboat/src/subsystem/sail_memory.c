@@ -64,6 +64,7 @@ void sail_linear_allocator_initialize_external(sail_linear_allocator* allocator,
     allocator->buffer = (u8*)buffer;
     allocator->capacity = capacity;
     allocator->currentIndex = 0;
+    allocator->currentItem = 0;
     allocator->externalBuffer = true;
 }
 
@@ -82,8 +83,8 @@ void* sail_linear_allocator_alloc_aligned(sail_linear_allocator* allocator, u64 
 
     void* ptr = &allocator->buffer[offset];
     allocator->currentIndex = offset + size;
-    
-    platform_zero_mem(ptr, size);
+    ++allocator->currentItem;
+
     return ptr;
 }
 void* sail_linear_allocator_alloc(sail_linear_allocator* allocator, u64 size)
@@ -95,12 +96,14 @@ void sail_linear_allocator_dealloc(sail_linear_allocator* allocator, u64 size)
     assert(allocator);
     assert(size > 0);
     allocator->currentIndex -= size;
+    --allocator->currentItem;
 }
 
 void sail_linear_allocator_clear(sail_linear_allocator* allocator)
 {
     assert(allocator);
     allocator->currentIndex = 0;
+    allocator->currentItem = 0;
 }
 
 void sail_linear_allocator_shutdown(sail_linear_allocator* allocator)
@@ -113,5 +116,6 @@ void sail_linear_allocator_shutdown(sail_linear_allocator* allocator)
     allocator->buffer = NULL;
     allocator->currentIndex = 0;
     allocator->capacity = 0;
+    allocator->currentItem = 0;
     allocator->externalBuffer = false;
 }
